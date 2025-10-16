@@ -14,6 +14,8 @@ RUN apt-get update \
        libicu72 \
        && rm -rf /var/lib/apt/lists/*
 
+
+
 # --- ETAPA 2: INSTALA O TECTONIC USANDO O SCRIPT DROP-SH E CRIA LINK ---
 # O script instala o binário em /tectonic.
 RUN curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh \
@@ -24,6 +26,8 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        biber \
     && rm -rf /var/lib/apt/lists/*
+
+
 
 # Define o diretório de trabalho padrão.
 WORKDIR /workspace
