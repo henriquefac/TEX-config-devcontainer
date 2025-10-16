@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  app:
+    # Usa o Dockerfile na pasta pai (raiz do projeto)
+    build: 
+      context: .
+      dockerfile: Dockerfile
+
+    volumes:
+      # Mapeia a pasta local atual (raiz do projeto) para /workspace no container
+      - .:/workspace:cached
+
+    # Substitui o WORKDIR do Dockerfile
+    working_dir: /workspace
+    
+    command: /bin/sh -c "while sleep 1000; do :; done"

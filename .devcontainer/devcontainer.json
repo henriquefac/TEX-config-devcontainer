@@ -1,0 +1,57 @@
+{
+
+  // *** MUDANÇAS AQUI ***
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+
+  // Configurações do VS Code que serão aplicadas *dentro* do container
+  "settings": {
+    "latex-workshop.latex.tools": [
+      {
+        "name": "tectonic",
+        "command": "tectonic",
+        "args": [
+          "%DOC%"
+        ]
+      },
+      {
+        "name": "tectonic-biber", // Usado com BibLaTeX
+        "command": "sh",
+        "args": [
+          "-c",
+          "tectonic %DOCFILE% && biber %BIBFILE% && tectonic %DOCFILE% && tectonic %DOCFILE%"
+        ]
+      }
+    ],
+    // Define a ferramenta padrão a ser usada na compilação
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "Tectonic (Biber)",
+            "tools": ["tectonic-biber"]
+        },
+        {
+            "name": "Tectonic",
+            "tools": ["tectonic"]
+        }
+    ],
+
+    // Habilita a compilação automática ao salvar o arquivo
+    "latex-workshop.latex.autoBuild.onSave.enabled": true,
+    
+    // Abre o PDF compilado em uma aba dentro do VS Code
+    "latex-workshop.view.pdf.viewer": "tab"
+  },
+
+  // Extensões que serão instaladas *dentro* do container
+  "extensions": [
+    "james-yu.latex-workshop",
+    "ms-azuretools.vscode-docker"
+  ],
+
+  // Comando executado após a criação do container
+  "postCreateCommand": "echo 'Tectonic environment is ready!'",
+
+  // Configuração de portas (não é estritamente necessário para LaTeX, mas é bom ter)
+  "forwardPorts": []
+}
