@@ -1,6 +1,5 @@
 {
 
-  // *** MUDANÇAS AQUI ***
   "dockerComposeFile": "../docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",
@@ -43,7 +42,7 @@
     "latex-workshop.view.pdf.viewer": "tab"
   },
 
-  // Extensões que serão instaladas *dentro* do container
+  // Extensões que serão instaladas dentro do container
   "extensions": [
     "james-yu.latex-workshop",
     "ms-azuretools.vscode-docker"
