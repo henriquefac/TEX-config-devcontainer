@@ -9,12 +9,10 @@ RUN apt-get update \
        gzip \
        ca-certificates \
        perl \
-       # --- NOVAS DEPENDÊNCIAS ESSENCIAIS PARA O TECTONIC ---
        libgraphite2-3 \
        libharfbuzz0b \
        libicu72 \
-       # ----------------------------------------------------
-    && rm -rf /var/lib/apt/lists/*
+       && rm -rf /var/lib/apt/lists/*
 
 # --- ETAPA 2: INSTALA O TECTONIC USANDO O SCRIPT DROP-SH E CRIA LINK ---
 # O script instala o binário em /tectonic.
