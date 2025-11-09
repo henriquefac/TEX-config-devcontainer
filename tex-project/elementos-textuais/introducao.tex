@@ -1,0 +1,57 @@
+\chapter{Introdução}
+
+O campo de pesquisa conhecido como \gls{ia}, reconhecido como um dos domínios mais enigmáticos e promissores da ciência contemporânea, originado a partir dos avanços em Ciência de Dados e do \gls{am}, tem se consolidado como uma das áreas mais influentes dos últimos tempos. Seu impacto transcende a Tecnologia da Informação, promovendo transformações em campos como a medicina, a educação e, notoriamente, o direito --- algo que será explorado ao longo deste trabalho.
+
+A magnitude de seu impacto é tamanha que figuras proeminentes da indústria tecnológica vêm se pronunciando de forma audaciosa sobre suas expectativas em relação a essa tecnologia emergente. Sundar Pichai, CEO da Google, declarou que "a inteligência artificial é mais profunda do que a eletricidade ou fogo", enfatizando o potencial disruptivo dessa tecnologia IA.
+
+Após períodos de estagnação, denominados "Invernos da Inteligencia Artificial" \cite{russell_artificial_2016} --- marcados pela frustração de expectativa e pela retração de investimentos --- o campo tem experimentado, nas últimas décadas, um crescimento exponencial. Esse avanço tem se destacado especialmente no subcampo conhecido como \gls{pln}, notoriamente com o advento dos \gls{llm}s, revolucionando a forma como sistemas computacionais interagem com a linguagem humana. Entre os modelos mais notáveis estão os da família GPT (Generative Pre-trained Transformer) e o LLaMA (Large Language Model Meta AI), ambos classificados como \gls{llm}s de propósito geral.
+
+A eficiência dos LLMs na manipulação da linguagem natural deve-se, em grande parte, à arquitetura Transformers, proposta por \citeonline{vaswani_attention_2017}. Essa arquitetura é baseada no mecanismo de atenção, mais especificamente na chamada self-attention, que possibilita a análise contextual de cada elemento textual (token), independente da sua posição na sequência. Assim, cada token é processado não apenas considerando seu significado isolado, mas também seu contexto em relação aos outros tokens de entrada.  
+
+Esse modelo de processamento é crucial para tarefas de transdução de sequência, ou sequence-to-sequence, nas quais uma sequência de entrada é convertida em uma sequência de saída. Trata-se de uma estrutura essencial para aplicações avançadas no campo do PLN, como tradução automática, reconhecimento de fala, sumarização de textos, análise de sentimentos, geração de texto e reconhecimento de entidades nomeadas. A versatilidade dessa abordagem tem possibilitado avanços significativos nos sistemas de automação, permitindo que tarefas historicamente atribuídas à cognição humana possam ser assumidas por sistemas computacionais.
+
+Essa capacidade já vem sendo explorada em diversas áreas que lidam com uma vasta quantidade de dados e informações, muitas vezes na forma de documentos contendo texto não estruturado. No âmbito jurídico, ferramentas como DraftWise têm desenvolvido soluções baseadas em IA para auxiliar advogados na redação e negociação de contratos.
+
+Além disso, estudos como o de \citeonline{mahoney_framework_2019} propõem frameworks para classificação de texto aplicável no contexto da revisão de documentos legais, visando melhorar a eficiência e a transparência na identificação de documentos relevantes durante processos legais.   
+
+Notoriamente, o processo de documentação e confecção de documentos a partir de texto não estruturado, uma tarefa extremamente relevante para a área do direito, se alinha muito bem com as capacidades dos modelos de LLM e suas afinidade com tarefas de transdução de sequências. Escritórios e departamentos jurídicos elaboram diariamente documentos como petições, procurações, contratos, acordos e atas de reunião, uma tarefa de natureza complexa, agravada pelo alto fluxo de trabalho que qualifica a prática jurídica.
+
+Portanto, diante desse contexto, a automação da redação de documentos jurídicos por meio de técnicas de NLP associadas a Modelos de Linguagem de Grande Escala mostra-se como uma solução promissora para solução programática para o desafio descrito. Essa abordagem visa não apenas otimizar o desempenho das atividades jurídicas, mas também promover eficiência, padronização e redução de erros em tarefas que demandam processamento intensivo de linguagem natural.  
+
+\section{Motivação}
+\label{sec:motivacao}
+
+No contexto político e judiciário, a transparência e a audibilidade configuram-se como pilares essenciais para garantir a confiabilidade das informações e a continuidade na gestão dos processos institucionais \cite{fernandes_propaganda_2021} não apenas sustentam a integridade das ações administrativas e jurídicas, como também promovem a devida prestação de contas à sociedade, elemento central em uma democracia.
+
+Nesse cenário, as atas de reunião assumem um papel estratégico como instrumento formal de registro. Sua importância reside na capacidade de sintetizar, de forma clara, precisa e organizada, os acontecimentos relevantes de um encontro institucional, incluindo os temas debatidos, as decisões tomadas e os encaminhamentos definidos. Diferentemente de uma simples transcrição literal das falas, a ata oferece uma representação estruturada dos eventos, o que facilita sua posterior consulta e contribui diretamente para a governança e a memória organizacional.
+
+Além da sua função administrativa e documental, as atas também desempenham um papel crucial no cumprimento das normas legais de transparência e acesso à informação. Sua elaboração e disponibilização pública estão em conformidade com legislações como a Lei de Acesso à Informação \cite{brasil_lei_2011} e a Lei da Transparência \cite{brasil_lei_2009}, reforçando o compromisso institucional com a responsabilidade e o controle social.
+
+Apesar de sua relevância, a produção de atas ainda é, majoritariamente, uma tarefa manual, morosa e sujeita a inconsistências de estilo, conteúdo e qualidade. A ausência de padronização entre diferentes órgãos e setores acentua esses desafios, dificultando a verificação, a interoperabilidade e o uso eficiente desses documentos. Diante desse cenário, torna-se evidente a necessidade de soluções que automatizem e otimizem esse processo, promovendo ganhos de tempo, padronização e conformidade legal.
+
+\section{Objetivos}
+
+\label{sec:objetivos}
+
+
+%Estudar a aplicação de técnicas de Processamento de Linguagem Natural (NLP), Modelos de Linguagem de Grande Escala (LLMs) e abordagens derivadas da Inteligência Artificial na automação do processo de síntese de atas de reunião.     
+
+\subsection{Objetivo Geral}
+\label{sec:objetivo-geral}
+
+
+O objetivo principal deste trabalho é desenvolver um software baseado em LLMs de código aberto para automatizar a elaboração de atas de reunião, avaliando sua eficácia e aplicabilidade nesse contexto. A proposta envolve a criação de uma solução capaz de processar transcrições estruturadas e extrair automaticamente informações essenciais, como: lista de participantes e seus respectivos cargos ou funções, pautas deliberadas, unidades proponentes, pautas extraordinárias sugeridas durante a reunião, assuntos discutidos e deliberações finais.
+
+
+\subsection{Objetivos Específicos}
+\label{sec:objetivos-especificos}
+
+Com essa abordagem, busca-se promover maior agilidade, precisão e padronização na elaboração de atas, contribuindo para a transparência e a eficiência dos processos institucionais. Essa iniciativa torna-se especialmente relevante em contextos nos quais a documentação tem papel crítico, como nos ambientes jurídico e administrativo. Para alcançar o objetivo geral, o trabalho será orientado por três objetivos específicos: 
+
+	\begin{alineas}
+		\item  Investigar o uso de modelos avançados de inteligência artificial na automação da extração de informações a partir de transcrições de reuniões
+		\item Analisar o impacto de diferentes configurações dos modelos e de prompts sobre a qualidade das respostas geradas
+		\item  Testar e comparar o desempenho de diversos modelos de linguagem natural em condições controladas, avaliando critérios como precisão, consistência e adequação às necessidades do domínio jurídico.
+	\end{alineas}
+
+Ao final da pesquisa, espera-se atingir dois resultados principais: (i) gera conclusões quanto ao desempenho dos modelos de LLM utilizados na tarefa de automação de Atas de reunião e como pode se aplicar para outros documentos; e (ii) a entrega de uma aplicação funcional, configurada como um produto mínimo viável (MVP), que integre todos os componentes desenvolvidos e comprove a viabilidade técnica e prática da solução. A aplicação deverá apresentar uma arquitetura escalável, eficiente e com potencial de uso real em ambientes institucionais.

@@ -1,0 +1,54 @@
+\chapter{Trabalhos Relacionados}
+\label{cap:trabalhos-relacionados}
+
+A aplicação de técnicas de Processamento de Linguagem Natural (PLN) e Inteligência Artificial (IA) no âmbito jurídico não é novidade. Há anos, pesquisadores e profissionais do direito exploram como essas tecnologias podem otimizar tarefas, aumentar a eficiência e aprimorar a tomada de decisões nesse setor complexo. Os trabalhos relacionados podem ser categorizados de diversas formas, mas para os propósitos deste estudo, focaremos em abordagens que utilizam IA e PLN para automação de documentos e análise textual no contexto legal, culminando na ascensão dos Modelos de Linguagem de Grande Escala (LLMs).
+
+\section{Automação e Análise Documental Jurídica com IA e PLN Tradicionais}
+\label{sec:automacao-analise-docmental-juridico}
+
+Historicamente, as iniciativas de inteligência artificial no setor jurídico visavam principalmente a automação de tarefas repetitivas e a análise de grandes volumes de documentos. Ferramentas baseadas em Processamento de Linguagem Natural (PLN) clássico e aprendizado de máquina supervisionado foram desenvolvidas para diversas aplicações, conforme detalhado na literatura \cite{katz_natural_2023}:
+
+\begin{itemize}
+    \item \textbf{Classificação de Documentos}: Categorizar petições, contratos ou decisões judiciais por tipo, assunto ou jurisdição. Isso frequentemente envolvia a extração de características textuais e o uso de classificadores tradicionais.
+    
+    \item \textbf{Extração de Informação}: Identificar e extrair entidades específicas de documentos jurídicos, como nomes de partes, datas de prazos processuais, valores de contratos ou cláusulas relevantes.
+    
+    \item \textbf{Revisão de Contratos e \textit{Due Diligence}}: Ferramentas auxiliavam na revisão de contratos para identificar cláusulas de risco ou inconsistências, acelerando o processo de análise jurídica e due diligence.
+    
+    \item \textbf{Previsão de Resultados Judiciais}: Alguns estudos tentaram prever os desfechos de processos judiciais com base em dados históricos, utilizando técnicas de machine learning mais tradicionais.
+\end{itemize}
+
+Embora essas abordagens tenham proporcionado ganhos de eficiência, elas frequentemente apresentavam limitações, como a necessidade de engenharia de características manual, dificuldade em lidar com a ambiguidade inerente à linguagem jurídica e sensibilidade a variações textuais não previstas nas regras ou nos dados de treinamento. Ademais, a capacidade de generalização para novos domínios ou tipos documentais era restrita, exigindo esforço considerável de adaptação e retreinamento.
+
+\section{A Transformação com Modelos de Linguagem Pré-Treinados (PLMs) e LLMs}
+\label{sec:transformacao-plm-llm}
+
+ Ascensão do Deep Learning e, em particular, dos Modelos de Linguagem Pré-Treinados (PLMs) baseados em Transformer (como BERT e GPT), marcou um ponto de inflexão nos trabalhos relacionados em PLN jurídico. Esses modelos trouxeram a capacidade de aprender representações contextuais densas e de alta qualidade para palavras e sentenças, superando as limitações dos embeddings estáticos e das abordagens estatísticas clássicas \cite{devlin_bert:_2018, katz_natural_2023}.
+
+ Com o surgimento dos Modelos de Linguagem Pré-Treinados (PLMs), como BERT, GPT e seus derivados, abriram-se novos horizontes para o Processamento de Linguagem Natural (PLN) jurídico, trazendo avanços significativos em várias frentes:
+
+\begin{itemize}
+    \item \textbf{Extração e Classificação}: A capacidade desses modelos de capturar nuances contextuais permitiu uma extração de informações e uma classificação de documentos muito mais precisa e robusta, reduzindo a dependência de regras explícitas ou engenharia manual de características.
+    
+    \item \textbf{Sistemas de Perguntas e Respostas Jurídicas}: Modelos pré-treinados foram adaptados para responder a perguntas formuladas em linguagem natural com base em bases de conhecimento jurídico, como legislação, jurisprudência e doutrina.
+    
+    \item \textbf{Sumarização de Textos Legais}: A criação automática de resumos de sentenças, pareceres e petições, tradicionalmente considerada uma tarefa de alta complexidade devido à densidade informacional e à linguagem formal do texto jurídico, tornou-se mais viável com o uso de PLMs.
+\end{itemize}
+
+A mais recente e significativa evolução nesse cenário é a ascensão dos Modelos de Linguagem de Grande Escala (LLMs). Ao escalar exponencialmente o número de parâmetros e a quantidade de dados de pré-treinamento, os LLMs (como GPT-3, LLaMA e Gemini) transcenderam as capacidades dos PLMs anteriores, desenvolvendo habilidades emergentes como o aprendizado zero-shot e few-shot \cite{brown_language_2020, wei_emergent_2022}. Isso significa que um LLM pode realizar uma vasta gama de tarefas jurídicas complexas – como gerar rascunhos de documentos, sintetizar longos históricos processuais ou responder a consultas legais complexas – com pouca ou nenhuma necessidade de fine-tuning específico para a tarefa \cite{katz_natural_2023}.
+
+Trabalhos recentes têm explorado o uso de Modelos de Linguagem de Grande Escala (LLMs) em aplicações jurídicas cada vez mais complexas, com destaque para as seguintes frentes:
+
+\begin{itemize}
+    \item \textbf{Geração de Documentos Jurídicos}: Automação da redação de petições simples, contratos padronizados, pareceres introdutórios e até mesmo comunicações jurídicas por e-mail, com linguagem formal e aderente ao contexto normativo.
+    
+    \item \textbf{Análise de Contratos em Larga Escala}: Revisão ultrarrápida de contratos com foco em conformidade, identificação de riscos contratuais e detecção de cláusulas-chave, apresentando desempenho superior em relação aos métodos baseados em regras ou aprendizado supervisionado tradicional.
+    
+    \item \textbf{Assistentes de Pesquisa Jurídica}: Desenvolvimento de sistemas capazes de responder perguntas jurídicas de forma contextualizada, muitas vezes apresentando fundamentação legal, referências jurisprudenciais ou apontamentos doutrinários relevantes.
+    
+    \item \textbf{Sumarização de Audiências e Processos}: Geração de resumos concisos e precisos de audiências, sessões deliberativas ou de todo o histórico de um processo judicial, o que representa um ganho significativo em termos de produtividade e compreensão.
+\end{itemize}
+
+Nesse contexto de avanço, pesquisas atuais também se concentram em garantir a confiabilidade e a explicabilidade das soluções de IA em domínios críticos e sensíveis a erros. A busca pela explicabilidade (XAI) é crucial no domínio jurídico, onde a justificação das conclusões é tão importante quanto a própria conclusão, e os LLMs representam novos desafios e oportunidades nesse sentido \cite{mahoney_framework_2019, katz_natural_2023}.
+
+Nesse cenário, este trabalho se insere na vanguarda da aplicação de LLMs para a automação da elaboração de atas de reunião no contexto jurídico, buscando alavancar as capacidades de compreensão contextual e geração de texto dos LLMs para enfrentar os desafios de precisão, tempo e padronização que ainda persistem na prática manual, ao mesmo tempo em que considera a necessidade de resultados confiáveis e auditáveis.

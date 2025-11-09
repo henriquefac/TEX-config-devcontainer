@@ -1,0 +1,86 @@
+\chapter{Metodologia}
+\label{chap:metodologia}
+
+Esta seção descreve os procedimentos desenvolvidos e adotados neste trabalho, com o objetivo de garantir uma implementação eficiente e assegurar a qualidade 
+dos resultados. Inicialmente, apresentam-se os passos relacionados à aquisição, pré-processamento e organização dos dados, visando gerar um \textit{dataset}
+adequado para testar a aplicação em suas diferentes fases e validar sua eficácia. Em seguida, detalham-se as etapas de desenvolvimento da aplicação, 
+abrangendo sua arquitetura, o fluxo de dados e a integração entre os módulos, com a descrição individual de cada componente.
+
+A metodologia para a definição do \textit{dataset} foi concebida de modo a estabelecer um conjunto de dados capaz de avaliar a qualidade dos resultados 
+gerados pela aplicação e validar sua arquitetura. Para tanto, foi desenvolvido um módulo em Python que realiza todas as etapas necessárias à geração dos
+dados, desde a aquisição até o refinamento, produzindo um conjunto final que atende aos requisitos mínimos para a validação da aplicação.
+
+Os dados utilizados consistem em tuplas de arquivos PDF e áudios referentes às atas das reuniões. Para possibilitar o processamento e a análise, ambos 
+os tipos de arquivo foram convertidos para o formato de texto: os documentos em PDF foram processados por meio de Reconhecimento Óptico de Caracteres (OCR), técnica utilizada para detectar e converter texto presente em imagens em conteúdo textual editável utilizando o Tesseract, enquanto 
+os arquivos de áudio foram transcritos com o modelo Whisper. Além disso, foram implementados dois módulos adicionais responsáveis pelo pré-processamento 
+dos dados, garantindo a padronização e a limpeza das informações antes da análise.
+
+Após a definição e o pré-processamento do \textit{dataset}, a arquitetura básica do sistema desenvolvido foi projetada para receber transcrições de reuniões 
+e gerar documentos PDF, contendo as informações necessárias dentro do modelo estabelecido. O sistema é composto por um \textit{frontend}, um \textit{backend} 
+e dois módulos principais: um responsável pela lógica de inteligência artificial e outro dedicado à geração do documento PDF.
+
+\section{Coleta de Dados}
+\label{sec:coleta-dados}
+
+Para o teste e a validação da aplicação desenvolvida, foi crucial a formação de um \textit{dataset} completo, bem estruturado e alinhado com a problemática central deste trabalho. Nesse contexto, a etapa inicial concentrou-se na identificação de fontes de dados públicas e confiáveis que pudessem fornecer pares documentais específicos: o texto formal da ata e o registro de como se sucedeu a reunião correspondente, também em texto.
+
+Este conjunto de dados emparelhados é indispensável, não apenas para a validação da aplicação final e a medição de seu desempenho, mas também para a construção do fluxo do sistema em suas fases de processamento. A utilização de dados reais, que espelham o ambiente final de implantação, permitiu o alinhamento e o refinamento dos módulos de aquisição, pré-processamento e análise de forma robusta e representativa.
+
+A instituição selecionada para a extração dos dados foi o Tribunal Regional Eleitoral do Ceará (TRE-CE). Por meio do portal oficial, disponível em \url{https://www.tre-ce.jus.br/servicos-judiciais/sessoes-de-julgamento/sessoes-plenarias}, foi possível acessar a seção de Serviços Judiciários, especificamente a aba de Sessões, Atas e Pautas de Julgamento. Nessa página, encontram-se os registros das sessões do Plenário, abrangendo o período de junho de 2011 até outubro de 2025.
+
+Para os propósitos deste trabalho, optou-se por extrair dados referentes ao intervalo de março de 2020 até outubro de 2025. Os registros disponibilizados no portal consistem em pares de \textit{links} para cada reunião, sendo essa definida através de sua data. Os pares de \textit{links} consistem em: uma URL que leva direto para o documento oficial no formato PDF, e um \textit{link} para a gravação da respectiva reunião, hospedada no YouTube.
+
+O acesso aos dados foi realizado diretamente por meio do portal oficial do TRE-CE, garantindo a confiabilidade e a legitimidade das informações coletadas. Após a identificação das fontes, foi conduzido um processo de averiguação dos dados disponíveis, verificando a integridade e a consistência entre as atas e as gravações. Em seguida, os dados foram classificados de acordo com sua natureza -- documentos PDF e arquivos de áudio.
+
+A complexidade e o volume dos dados a serem processados tornaram impraticável a coleta manual. Para a aquisição em si, foi necessário o desenvolvimento de um módulo de automação em Python capaz de buscar os pares de arquivos dentro do período definido, filtrar os registros válidos, classificá-los baseado na data da reunião e, finalmente, baixar os arquivos para que estivessem prontos para uso no formato esperado pela pipeline que será discutida mais adiante.
+
+Para a implementação desse módulo, foi considerado diversas técnicas, sendo uma delas o \textit{Web Scrapping}. No entanto, visando a robusteza e confiabilidade, foi escolhido uma abordagem mais direta. Investigando o comportamento da página (utilizando ferramentas de desenvolvedor), foi possível deduzir a lógica por trás da construção da URL utilizada para as requisições à API.
+\vspace{0.21cm}
+
+O módulo de automação, utilizando a biblioteca \textit{requests} do Python, faz requisições diretas a esses \textit{endpoints} de dados, em vez de processar o HTML da página. Essa abordagem garante que a automação seja mais robusta e resistente a alterações visuais no \textit{frontend} do site, já que ela interage com a camada de dados subjacente. A extração dos metadados em formato estruturado (e.g., JSON) permitiu a classificação e o tratamento rápido das URLs para \textit{download} (PDF) e extração (YouTube). 
+
+Adicionalmente ao módulo principal de coleta, foi desenvolvida uma ferramenta dedicada à interação com os dados, motivada pelo volume potencial de arquivos e pela limitação de espaço de armazenamento disponível. Esta ferramenta opera com uma lógica de acesso \textit{on-demand}: os arquivos são baixados localmente somente quando necessários para o processamento e são automaticamente apagados ao fim da iteração, minimizando o consumo de espaço total.
+
+Contudo, para lidar com pequenas amostras e acelerar o desenvolvimento e testes, o módulo também permite o \textit{download} e o armazenamento permanente dos dados localmente.
+
+Especificamente para os arquivos de áudio e vídeo hospedados no YouTube, foi necessário utilizar a biblioteca \textit{YouTubeFix} para interagir com os canais de \textit{streaming} disponíveis. O módulo foi configurado para acessar e extrair apenas a faixa de áudio na melhor qualidade disponível no formato \textit{webm}.
+
+Com isso, foi estabelecido um canal de acesso em tempo real aos dados brutos de interesse para a aplicação. Todos os próximos passos em relação ao desenvolvimento foram feitos a partir desse ponto, aproveitando a disponibilidade e formatação constante dos dados. Para a construção do \textit{dataset} final, esses dados brutos ainda precisariam passar por uma fase de pré-processamento a fim de padronizar as informações no formato de texto.
+
+\section{Processamento de Dados}
+\label{sec:processamento-de-dados}
+
+Esta etapa teve como objetivo a padronização dos dados brutos coletados, ou seja, as atas de reunião em formato PDF e as faixas de áudio no formato \textit{webm}, em uma representação textual estruturada, dequada tanto à aplicação desenvolvida nesse trabalho quanto às técnicas que serão discutidas nos capítulos seguintes, mas mais importante, fiel ao conteúdo original.
+
+A conversão dos dados para formato textual justifica-se, principalmente, por duas razões. Primeiramente, o texto é a modalidade nativa de entrada para a maioria dos modelos de linguagem de larga escala, mesmo que haja, em alguns casos, suporte multimodal. No entanto, mesmo nesses casos, os modelos costumam realizar internamente uma conversão intermediária entre modalidades, por exemplo de áudio para texto, para assim permitir a compreensão semântica do conetúdo, exposto por \citeonline{yin_survey_2023}. Em segundo lugar, como o produto final esperado da pesquisa também é textual, manter o processamento inteiro na mesma modalidade reduz perdas de informação e evita conversões sucessivas, preservando alinhamento semântico entre entrada, processamento e saída.
+
+\subsection{Processamento de arquivos PDF}
+\label{sec:processamento-de-arquivos-PDF}
+
+Inicialmente, realizou-se uma análise exploratória dos arquivos em formato PDF com o propósito de identificar a estratégia mais adequada para sua conversão em texto, minimizando perdas de conteúdo ou distorções. Dado a natureza do tipo de arquivo (PDF), foi considerado a extração direta do conteúdo, aproveitando a sua estrutura interna. 
+
+A abordagem inicial utilizou o módulo \textit{PyMuPDF}, responsável por interpretar a estrutura do PDF, extrair o conteúdo textual e armazená-lo em arquivos de texto simples. Entretanto, a inspeção detalhada do conjunto de dados revelou que uma parcela significativa dos arquivos não continha texto embutido, o que indicava que se tratavam de digitalizações de documentos físicos, assim impossibilitando a extração tradicional.
+
+Diante dessa constatação, tornou-se necessária a aplicação de OCR. Assim, o fluxo de processamento passou, então, a iniciar pela detecção do tipo de documento — distinguindo entre PDFs com texto nativo e aqueles compostos por imagens digitalizadas. A classificação define a rota de processamento mais apropriada para cada caso.
+
+Para documentos com texto pesquisável, manteve-se a extração direta via \textit{PyMuPDF}, uma vez que essa abordagem preserva melhor a fidelidade do conteúdo original. Já para os arquivos derivados de material físico, aplicou-se OCR por meio do motor Tesseract. Cada PDF foi previamente segmentado em imagens — uma por página — e o OCR foi executado em paralelo, página a página. Os resultados da conversão, ao final, foram consolidados em arquivos de texto simples, mantendo uma estrutura uniforme para uso nas etapas posteriores do estudo.
+
+\subsection{Processamento de Áudio}
+\label{sec:processamento-audio}
+
+A conversão do conteúdo das faixas de áudio para a modalidade textual foi, desde o início, enquadrada como uma tarefa apropriada para modelos de inteligência artificial especializados em reconhecimento automático de fala (ASR — Automatic Speech Recognition). É importante ressaltar que todos os modelos e tecnologias empregados neste trabalho possuem origem open source e foram executados localmente, garantindo reprodutibilidade e preservação da privacidade dos dados.
+
+Assim como ocorreu com os arquivos em formato PDF, realizou-se inicialmente uma análise exploratória das faixas de áudio extraídas, a fim de compreender suas características e definir um fluxo de processamento adequado ao conjunto de dados.
+
+Durante essa análise, identificaram-se alguns desafios importantes. Um dos primeiros foi a presença de longos períodos de silêncio antes do início e após o término das reuniões, ou seja, períodos que não agragam ao conteúdo final, mas custam no processamento. Além disso, observou-se que as falas dos participantes foram captadas por microfones fixos dispostos sobre as mesas, o que ocasionou variações perceptíveis no volume de voz, uma vez que os interlocutores não mantinham distância constante do microfone.
+
+Outro fator relevante foi a presença de participantes remotos em diversas reuniões. O áudio proveniente dessas intervenções foi registrado de forma indireta — captado pelo som emitido pelos alto-falantes da sala e não diretamente do canal de comunicação digital. Essa dupla captação introduziu eco, reverberação e distorções adicionais, afetando consideravelmente a qualidade do sinal.
+
+Por fim, foi identificado um nível muito alto de ruído no ambiente em quase todos os registros das reuniões, normalmente ocasionado pelo microfone de um participante não estar devidamente desligado quando já havia passado a palavra ou outras fontes externas diversas.
+
+Esses fatores evidenciam a necessidade de um pré-processamento de áudio rigorososo, algo que se tornou uma etapa fundamnetal desta pipeline. A qualidade do áudio ao longo das próximas fazes afetou diretamente a captura do sentido no resultado final, assim, foi necessário tomar diversas medidas para solucionar esses empecilhos.
+
+Primeiramente, é preciso expor a principal ferramenta nessa tarefa de transcrição de áudio, o modelo \textit{Whisper} da openai, através do módulo faster-whisper. Ele foi empregado como a força motriz nessa faze, sendo indispensável para a realização da conversão. Todas as etpas que precedem seu uso, visão aprimorar seu resultado final.
+
+Assim, na fase de pré-processamento, foi preciso primeiramente converter as faixas de áudio para um formato compatível com o modelo empregado. A conversão se deu utilizando a biblioteca ffmpeg (explicar o que é, primeira vez que foi mencionado), que recebue áudios no formato webm e converteu para wav, com amostragem PCM de 16 bits.
+
