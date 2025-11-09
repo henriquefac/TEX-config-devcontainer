@@ -300,17 +300,13 @@ Onde:
 
 O processo de cálculo é estritamente sequencial. Para cada passo de tempo n, a rede precisa da entrada $x[n]$ e, crucialmente, do estado interno imediatamente anterior $s[n-1]$. Para fins de treinamento, esse laço recorrente é "desdobrado" (\textit{unrolled}) ao longo de toda a sequência, transformando conceitualmente em uma rede \textit{feedforward} profunda ao longo do tempo, onde cada passo de tempo é uma nova camada que reutiliza os mesmos pesos \cite{sherstinsky_fundamentals_2023}.
 
-\vspace{1em}
-
 \begin{figure}[h!]
     \centering
     \Caption{\label{fig:rnn_cell} Diagrama de Fluxo da Célula Canônica da Recurrent Neural Network (RNN).}
-    \UNIFORfig{
-
-    }
+    \UNIFORfig{}
     {
         % Imagem
-        \fbox{\includegraphics[width=0.9\linewidth]{figuras/rnn.png}}
+        \fbox{\includegraphics[width=0.85\linewidth]{figuras/rnn_recurrent_unit.png}}
     }
     {
         % Fonte
@@ -318,11 +314,40 @@ O processo de cálculo é estritamente sequencial. Para cada passo de tempo n, a
     }   
 \end{figure}
 
-\vspace{1em}
-
 O Diagrama de Fluxo da Célula Canônica (Figura \ref{fig:rnn_cell}) ilustra esse mecanismo de processamento, onde o novo estado $\vec{s}[n]$ é computado como uma combinação linear de três componentes ponderados: a entrada atual $\vec{x}[n]$ ($W_x\vec{x}[n]$), o readout anterior $\vec{r}[n-1]$ ($W_r\vec{r}[n-1]$) e o estado anterior $\vec{s}[n-1]$ ($W_s\vec{s}[n-1]$). Essa soma linear é então submetida a uma função de ativação não-linear ($G$, como a $\tanh$) para gerar o sinal de leitura $\vec{r}[n]$, que será reutilizado no próximo passo de tempo, perpetuando assim a memória do sistema.
 
 
+Assim como na rede \textit{Multilayer Perceptron}, o treinamento desse modelo usa uma variação do algortimo \textit{backpropagation}, denominada \textit{Back Propagation Through Time} (BPTT), com o objetivo de propagar o erro e calcular os gradientes para atualizar os pesos \cite{schmidt_recurrent_2019}.
+
+O BPTT trata a RNN desdobrada por $K$ passos como uma rede \textit{feedforward} profunda com $K$ camadas, onde o conjunto de pesos ($W_x$, $W_r$, $W_s$) é compartilhado em todas elas. O gradiente total para cada parâmetro é, portanto, a soma dos gradientes calculados em cada passo de tempo da sequência. Essa soma é calculada na fase de propagação para trás (\textit{backward pass}), onde o erro é retro-propagado recursivamente a partir do último passo da sequência.
+
+No entanto, apesar de ser teoricamente possível o treinamento de uma RNN, o BPTT, quando aplicado a sequências longas, apresenta uma instabilidade numérica causada pela sua natureza de laço de repetição, que impede o modelo de aprender dependências distantes.
+
+Esse problema está liagado à à regra da cadeia multiplicativa que rege a propação a propagação do gradiente do erro ($\vec{\psi}$) através de muitos passos de tempo, conforme dado pela a seguir:
+
+$$\frac{\partial\vec{\psi}[n]}{\partial\vec{\psi}[l]}=\prod_{k=n+1}^{l}W_{r}\odot\frac{dG(\vec{z})}{d\vec{z}}\rfloor_{z=\vec{s}[k]}$$
+
+Característico das RNNs, esse defeito é conhecido como \textit{Exploding \textbackslash Vanishing Gradient Problem} \cite{vennerod_long_2021}. É dito que, em teoria, o estado oculto de cada célula RNN pode rastrear a informação por um tmepo arbitrário. No entanto, conforme o valor oculto de $s[n]$ é atualizado a cada passo de $n$, a depedência do tempo acarreta nas depdências de longo prazo (para sequências acima de 100 passos) serem ignoradas durante o treino \cite{le_quantifying_2016}.
+
+O termo $\prod_{k=n+1}^{l}W_{r}\odot\frac{dG(\vec{z})}{d\vec{z}}\rfloor_{z=\vec{s}[k]}$ na equação acima demonstra que a influência do gradiente em um passo distante ($l$) sobre um passo anterior ($n$) é determinada por uma multiplicação em cadeia de matrizes Jacobianas. Essa multiplicação resulta em dois problemas críticos:
+
+\begin{enumerate}
+    \item Desaparecimento de Gradientes (\textit{Vanishing Gradients}): Ocorre quando os valores dominantes (autovalores) da matriz de peso recorrente $W_r$ e a derivada da função de ativação $G$ são consistentemente menores que 1. Conforme o gradiente é retro-propagado, o produto em cadeia tende a zero exponencialmente, fazendo com que os pesos nos primeiros passos da sequência não recebam atualizações significativas.
+
+    \item Explosão de Gradientes (\textit{Exploding Gradients}): Ocorre se os autovalores da matriz $W_r$ forem consistentemente maiores que 1. Neste cenário, a magnitude do gradiente cresce exponencialmente, o que leva à instabilidade no treinamento e a grandes \textit{overflows} numéricos. A mitigação prática para este problema é a técnica de \textit{gradient clipping}, que limita o valor máximo do gradiente.
+
+\end{enumerate}
+
+O problema do \textit{vanishing gradient} foi o que inspirou o desenvolvimento da arquitetura \textit{Long Short-Term Memory} (LSTM) em 1997 \cite{hochreiter_long_1997}. A LSTM abordou essa falha estrutural ao introduzir o caminho de estado de célula $C_t$ (ou $s[n]$ em uma notação simplificada), que permite que o gradiente flua de forma estável através de operações de soma em vez de multiplicação, criando o modo "\textit{Constant Error Carousel} (CEC)". Adicionalmente, a LSTM utiliza portões multiplicativos (\textit{gates}) (como o \textit{Forget} e \textit{Input} gate) que controlam seletivamente quais informações reter ou descartar, garantindo que a rede possa aprender e reter dependências de longo prazo.
+
+Apesar de as LSTMs representarem um avanço significativo, permitindo o aprendizado de dependências mais longas, elas ainda enfrentam restrições estruturais e computacionais. O processamento estritamente sequencial das RNNs e LSTMs implica que cada passo de tempo depende do anterior, impossibilitando a paralelização do cálculo durante o treinamento. Isso resulta em altos custos computacionais e baixa escalabilidade quando aplicadas a grandes volumes de dados, como aqueles necessários para modelagem de linguagem em larga escala \cite{vaswani_attention_2017}.
+
+Além disso, mesmo com os mecanismos de portões, o alcance das dependências de longo prazo ainda é limitado — especialmente em sequências muito extensas, nas quais a informação relevante precisa ser propagada por centenas ou milhares de passos. Esse comportamento se reflete em dificuldades de captura de relações contextuais distantes, como, por exemplo, dependências gramaticais entre palavras separadas por grandes trechos de texto.
+
+Em resposta a essas limitações, surgiram variações como as Gated Recurrent Units (GRU) \cite{cho_learning_2014}, que simplificam a estrutura da LSTM mantendo desempenho similar, e arquiteturas híbridas com mecanismos de atenção adicionados sobre camadas recorrentes (\textit{Attention-based RNNs}). No entanto, a presença de recorrência ainda impõe uma barreira intrínseca à eficiência e à capacidade de paralelização.
+
+Essa busca por maior eficiência e por uma modelagem mais direta das relações entre todos os elementos de uma sequência levou, em 2017, à introdução da arquitetura Transformer \cite{vaswani_attention_2017}.
+O Transformer elimina completamente a recorrência, substituindo-a por um mecanismo de atenção auto-regressiva (\textit{self-attention}) capaz de modelar dependências globais entre quaisquer posições da sequência de forma paralela. Essa abordagem não apenas resolve os problemas de gradiente e paralelização, mas também se mostrou excepcionalmente escalável, constituindo a base dos Modelos de Linguagem de Grande Escala (LLMs) modernos.
 
 \section{Arquitetura Transformer}
 \label{sec:arquitetura-transformer}
@@ -420,6 +445,7 @@ No entanto, à medida que a escala desses modelos aumenta, surgem novos desafios
 Para lidar com essas limitações, diversas estratégias têm sido desenvolvidas. Entre elas, destaca-se a quantização, uma técnica que reduz a precisão dos parâmetros do modelo (por exemplo, de 32 para 8 bits), diminuindo o consumo de memória e acelerando o tempo de inferência, com impacto mínimo na performance \cite{ansar_survey_2024}.  Outras técnicas incluem a poda (pruning), que remove conexões ou neurônios menos importantes, e a destilação de conhecimento (knowledge distillation), que treina um modelo menor para imitar o comportamento de um modelo maior.
 
 Nesse contexto, plataformas como o Ollama surgiram como ferramentas cruciais para democratizar o acesso e o uso eficiente de LLMs. O Ollama permite aos usuários baixar e executar modelos de linguagem de grande escala (incluindo versões quantizadas de modelos populares como Llama 3, Mixtral e Gemma) diretamente em suas máquinas locais, aproveitando ao máximo o hardware disponível. Isso remove a dependência de infraestruturas de nuvem complexas e caras para inferência, facilitando o desenvolvimento de aplicações e a experimentação com LLMs em ambientes privados e controlados. Ao otimizar a execução para CPUs e GPUs de consumidor e ao suportar modelos em formatos mais eficientes, o Ollama exemplifica como as inovações em software e as técnicas de otimização tornam os LLMs mais acessíveis e aplicáveis em uma gama mais ampla de cenários.
+
 \section{Ollama}
 
 \label{sec:ollama}
