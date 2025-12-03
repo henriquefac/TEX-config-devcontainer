@@ -68,7 +68,7 @@ Para documentos com texto pesquisável, manteve-se a extração direta via \text
 \subsection{Processamento de Áudio}
 \label{sec:processamento-audio}
 
-A conversão do conteúdo das faixas de áudio para a modalidade textual foi, desde o início, enquadrada como uma tarefa apropriada para modelos de inteligência artificial especializados em reconhecimento automático de fala (ASR — Automatic Speech Recognition). É importante ressaltar que todos os modelos e tecnologias empregados neste trabalho possuem origem open source e foram executados localmente, garantindo reprodutibilidade e preservação da privacidade dos dados.
+A conversão do conteúdo das faixas de áudio para a modalidade textual foi, desde o início, enquadrada como uma tarefa apropriada para modelos de inteligência artificial especializados em reconhecimento automático de fala (ASR — Automatic Speech Recognition). Todos os modelos e ferramentas utilizados são de código aberto e foram executados localmente, assegurando reprodutibilidade, controle total sobre o ambiente de execução e preservação da privacidade dos dados.
 
 Assim como ocorreu com os arquivos em formato PDF, realizou-se inicialmente uma análise exploratória das faixas de áudio extraídas, a fim de compreender suas características e definir um fluxo de processamento adequado ao conjunto de dados.
 
@@ -78,12 +78,28 @@ Outro fator relevante foi a presença de participantes remotos em diversas reuni
 
 Por fim, foi identificado um nível muito alto de ruído no ambiente em quase todos os registros das reuniões, normalmente ocasionado pelo microfone de um participante não estar devidamente desligado quando já havia passado a palavra ou outras fontes externas diversas.
 
-Esses fatores evidenciam a necessidade de um pré-processamento de áudio rigorososo, algo que se tornou uma etapa fundamnetal desta pipeline. A qualidade do áudio ao longo das próximas fazes afetou diretamente a captura do sentido no resultado final, assim, foi necessário tomar diversas medidas para solucionar esses empecilhos.
+Esses fatores evidenciaram a necessidade de um pré-processamento rigoroso, que se tornou uma etapa fundamental da pipeline. A qualidade do áudio processado impacta diretamente o desempenho do modelo de ASR; portanto, diversas medidas foram adotadas para mitigar os problemas identificados.
 
-Primeiramente, é preciso expor a principal ferramenta nessa tarefa de transcrição de áudio, o modelo \textit{Whisper} da openai, através do módulo faster-whisper. Ele foi empregado como a força motriz nessa faze, sendo indispensável para a realização da conversão. Todas as etpas que precedem seu uso, visão aprimorar seu resultado final.
+A principal ferramenta empregada na etapa de transcrição foi o modelo Whisper, da OpenAI, utilizado em sua implementação otimizada faster-whisper. Esse modelo constitui o núcleo do processo de conversão de fala para texto, e todas as etapas anteriores ao seu uso foram projetadas para maximizar sua precisão.
 
-Assim, na fase de pré-processamento, foi preciso primeiramente converter as faixas de áudio para um formato compatível com o modelo empregado. A conversão se deu utilizando a biblioteca ffmpeg (explicar o que é, primeira vez que foi mencionado), que recebue áudios no formato webm e converteu para wav, com amostragem PCM de 16 bits.
+No pré-processamento, uma das primeiras ações consistiu em converter as faixas de áudio para um formato plenamente compatível com o modelo utilizado. Essa conversão foi realizada com a biblioteca FFmpeg, uma ferramenta amplamente utilizada para manipulação, transcodificação e análise de áudio e vídeo. \\ 
+
+Os arquivos originais, fornecidos em formato WebM, foram reamostrados para uma taxa de 16 kHz, convertidos para canal único (mono) e codificado para o padrão PCM de 16 bits. A adoção desses parâmetros, além de ser o recomendado para ser processado pelo modelo Whisper, visa assegurar a fidelidade do sinal.
+
+Durante o processo de conversão, foram aplicados filtros destinados à melhoria da inteligibilidade do áudio e à redução de heterogeneidades decorrentes das condições reais de gravação. Empregou-se, inicialmente, o filtro dynaudnorm, responsável pela normalização dinâmica do volume, reduzindo oscilações de intensidade que se originam de variações na posição relativa dos interlocutores em relação aos microfones fixos da sala. 
+
+Em complemento, utilizou-se o filtro acompressor, cuja função consiste em atenuar picos abruptos de amplitude e promover maior uniformidade no sinal. A aplicação combinada desses filtros contribuiu para mitigar discrepâncias de volume e aprimorar a clareza acústica do material processado.
+
+O FFmpeg foi configurado para produzir a saída diretamente por meio de fluxo binário (pipe), eliminando a necessidade de criação de arquivos intermediários no sistema de armazenamento. O áudio resultante foi armazenado em um objeto de memória volátil, permitindo seu encaminhamento imediato às etapas subsequentes da pipeline de transcrição. Esse procedimento reduziu o tempo total de processamento, simplificou o fluxo operacional e forneceu ao modelo Whisper um sinal mais consistente e menos suscetível a ruídos e variações indesejadas, favorecendo, assim, a precisão dos resultados obtidos.
+
+Após a conversão e padronização inicial das faixas de áudio, procedeu-se à etapa de redução de ruído, cuja finalidade consistiu em mitigar interferências acústicas presentes nas gravações originais. Para esse fim, empregou-se um modelo de rede neural recorrente (RNN) especialmente treinado para a tarefa de supressão de ruído, disponibilizado por GregorR (2018) em repositório público. O modelo, no formato “.rnnn”, foi executado localmente por meio do filtro arnndn do FFmpeg, que implementa uma interface nativa para modelos de denoising baseados em redes neurais.
+
+O áudio, previamente convertido e normalizado, foi encaminhado ao FFmpeg por meio de fluxo binário, evitando a criação de arquivos intermediários. Durante o processamento, aplicou-se o filtro arnndn, configurado para utilizar o modelo selecionado, o qual é especializado na redução de ruído estacionário e de baixa frequência, característico de ambientes com microfones abertos, ventilação ambiente ou reverberações persistentes. \\
+
+Em complemento, aplicou-se o módulo loudnorm com o objetivo de promover a normalização do nível sonoro percebido, reduzir o intervalo dinâmico e assegurar limites máximos de pico adequados às condições típicas de fala. Essa combinação de filtros resultou em um sinal mais uniforme, com redução significativa de ruídos de fundo e melhora na clareza das vozes registradas.
+
+O resultado do processo foi gerado em formato WAV, com codificação PCM de 16 bits e taxa de amostragem de 16 kHz, preservando a compatibilidade com as etapas subsequentes da pipeline de transcrição. O áudio processado foi mantido em memória volátil e reintegrado ao fluxo operacional sem necessidade de gravação em disco. A etapa de redução de ruído mostrou-se especialmente relevante devido à presença recorrente de interferências ambientais nas gravações das reuniões, impactando diretamente a acurácia do modelo de ASR utilizado.
+
 
 \section{Métricas de Avaliação}
 \label{sec:metrica-de-avaliacao}
-
