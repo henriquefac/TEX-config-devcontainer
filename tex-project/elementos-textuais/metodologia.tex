@@ -6,13 +6,9 @@ dos resultados. Inicialmente, apresentam-se os passos relacionados à aquisiçã
 adequado para testar a aplicação em suas diferentes fases e validar sua eficácia. Em seguida, detalham-se as etapas de desenvolvimento da aplicação, 
 abrangendo sua arquitetura, o fluxo de dados e a integração entre os módulos, com a descrição individual de cada componente.
 
-A metodologia para a definição do \textit{dataset} foi concebida de modo a estabelecer um conjunto de dados capaz de avaliar a qualidade dos resultados 
-gerados pela aplicação e validar sua arquitetura. Para tanto, foi desenvolvido um módulo em Python que realiza todas as etapas necessárias à geração dos
-dados, desde a aquisição até o refinamento, produzindo um conjunto final que atende aos requisitos mínimos para a validação da aplicação.
+A metodologia para a definição do \textit{dataset} envolveu a aquisição, o pré-processamento e a organização dos dados brutos, visando a criação de um conjunto final adequado para o treinamento e a validação da aplicação.
 
-Os dados utilizados consistem em tuplas de arquivos PDF e áudios referentes às atas das reuniões. Para possibilitar o processamento e a análise, ambos 
-os tipos de arquivo foram convertidos para o formato de texto: os documentos em PDF foram processados por meio de Reconhecimento Óptico de Caracteres (OCR), técnica utilizada para detectar e converter texto presente em imagens em conteúdo textual editável utilizando o Tesseract, enquanto 
-os arquivos de áudio foram transcritos com o modelo Whisper. Além disso, foram implementados dois módulos adicionais responsáveis pelo pré-processamento 
+Os dados utilizados consistem em tuplas de arquivos PDF e áudios referentes às atas das reuniões. Para possibilitar o processamento e a análise, ambos os tipos de arquivo foram convertidos para o formato de texto: os documentos em PDF foram processados por meio de Reconhecimento Óptico de Caracteres (OCR), técnica utilizada para detectar e converter texto presente em imagens em conteúdo textual editável utilizando o Tesseract, enquanto os arquivos de áudio foram transcritos com o modelo Whisper. Além disso, foram implementados dois módulos adicionais responsáveis pelo pré-processamento 
 dos dados, garantindo a padronização e a limpeza das informações antes da análise.
 
 Após a definição e o pré-processamento do \textit{dataset}, a arquitetura básica do sistema desenvolvido foi projetada para receber transcrições de reuniões 
@@ -22,13 +18,11 @@ e dois módulos principais: um responsável pela lógica de inteligência artifi
 \section{Coleta de Dados}
 \label{sec:coleta-dados}
 
-Para o teste e a validação da aplicação desenvolvida, foi crucial a formação de um \textit{dataset} completo, bem estruturado e alinhado com a problemática central deste trabalho. Nesse contexto, a etapa inicial concentrou-se na identificação de fontes de dados públicas e confiáveis que pudessem fornecer pares documentais específicos: o texto formal da ata e o registro de como se sucedeu a reunião correspondente, também em texto.
-
-Este conjunto de dados emparelhados é indispensável, não apenas para a validação da aplicação final e a medição de seu desempenho, mas também para a construção do fluxo do sistema em suas fases de processamento. A utilização de dados reais, que espelham o ambiente final de implantação, permitiu o alinhamento e o refinamento dos módulos de aquisição, pré-processamento e análise de forma robusta e representativa.
+A etapa inicial da metodologia concentrou-se na criação de um \textit{dataset}, através da identificação de fontes de dados públicas e confiáveis que pudessem fornecer pares documentais específicos: o texto formal da ata e a gravação da reunião correspondente.
 
 A instituição selecionada para a extração dos dados foi o Tribunal Regional Eleitoral do Ceará (TRE-CE). Por meio do portal oficial, disponível em \url{https://www.tre-ce.jus.br/servicos-judiciais/sessoes-de-julgamento/sessoes-plenarias}, foi possível acessar a seção de Serviços Judiciários, especificamente a aba de Sessões, Atas e Pautas de Julgamento. Nessa página, encontram-se os registros das sessões do Plenário, abrangendo o período de junho de 2011 até outubro de 2025.
 
-Para os propósitos deste trabalho, optou-se por extrair dados referentes ao intervalo de março de 2020 até outubro de 2025. Os registros disponibilizados no portal consistem em pares de \textit{links} para cada reunião, sendo essa definida através de sua data. Os pares de \textit{links} consistem em: uma URL que leva direto para o documento oficial no formato PDF, e um \textit{link} para a gravação da respectiva reunião, hospedada no YouTube.
+Para os propósitos deste trabalho, optou-se por extrair dados referentes ao intervalo de março de 2020 até outubro de 2025. Essa escolha se deu principalemnte por causa da estrutura dos registros a partir da data inicial, que passaram a consistir numa dupla: ata de reunião e registro de vídeo da reunião. Os registros disponibilizados no portal consistem em pares de \textit{links} para cada reunião, sendo essa definida através de sua data. Os pares consistem em: uma URL que leva direto para o documento oficial no formato PDF, e um \textit{link} para a gravação da respectiva reunião, hospedada no YouTube. 
 
 O acesso aos dados foi realizado diretamente por meio do portal oficial do TRE-CE, garantindo a confiabilidade e a legitimidade das informações coletadas. Após a identificação das fontes, foi conduzido um processo de averiguação dos dados disponíveis, verificando a integridade e a consistência entre as atas e as gravações. Em seguida, os dados foram classificados de acordo com sua natureza -- documentos PDF e arquivos de áudio.
 
@@ -112,7 +106,9 @@ Ainda na fase de diarização, foi preciso realizar um pós processamento em cim
 
 Para lidar como esse problema, desenvolveu-se um algoritmo de unificação (\textit{merge}) de segmentos baseada na análise estatística da pausas do trechos consecutivos de um mesmo locutor identificado. Inicialmente, os seguimentos são agrupados em vetores respectivos ao seu falante e em seguida são ordenados temporalmente. Com isso, para cada grupo, calcula-se a diferença entre o fim e o iníco dos segmentos. Essas diferenças, representativas da duração das pausas intralocutor, são reunidas em um único vetor e filtradas para remover valores negativos ou não significativos.
 
-Com esse conjunto de intervalos, aplica-se o método \textit{Multi-Otsu Thresholding}, que realiza particionamento automatizado dos valores em, para essa implementação, três faixas, identificando limiares que separam pausas curtas, intermediárias e longas. O menor desses limiares é então usado como \textit{threshold} para filtrar as pausas artificiais consecutivas entre segmentos para, assim, realizar o processo de fusão.
+Com esse conjunto de intervalos, aplica-se o método \textit{Multi-Otsu Thresholding}, que realiza particionamento automatizado dos valores em, para essa implementação, três faixas, identificando limiares que separam pausas curtas, intermediárias e longas. O menor desses limiares é então usado como \textit{threshold} para filtrar as pausas artificiais consecutivas entre segmentos para, assim, realizar o processo de fusão: duas ocorrências consecutivas atribuídas ao mesmo falante são unificadas sempre que a pausa entre elas se mostrar inferior a esse valor.
+
+Além disso, o algoritmo incorpora heuristica para lidar com sobreposições nas falas, decorrente de imprecisões pontuais do modelo. Quando indentfica uma diferença temporal negativa suficientemente pequena entre segmentos consecutivos de falantes distintos, o algoritmo também executa uma unificação, evitando que uma fala de um mesmo interlocutor seja dividida em falas de dois participantes diferentes.
 
 
 
