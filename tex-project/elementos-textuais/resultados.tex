@@ -4,3 +4,55 @@
 \section{Coleta de dados}
 
 Este conjunto de dados emparelhados é indispensável, não apenas para a validação da aplicação final e a medição de seu desempenho, mas também para a construção do fluxo do sistema em suas fases de processamento. A utilização de dados reais, que espelham o ambiente final de implantação, permitiu o alinhamento e o refinamento dos módulos de aquisição, pré-processamento e análise de forma robusta e representativa.
+
+Essa escolha se deu principalemnte por causa da estrutura dos registros a partir da data inicial, que passaram a consistir numa dupla: ata de reunião e registro de vídeo da reunião.
+
+\section{Análise Exploratória e Justificativa do Dataset}
+\label{sec:analise-dataset}
+
+A seleção do período de dados a ser processado (março de 2020 a outubro de 2025) foi definida com base em uma análise exploratória dos registros disponíveis no portal do TRE-CE. Embora o portal ofereça dados de sessões plenárias anteriores, verificou-se que a **estrutura documental necessária** para a validação da aplicação -- o pareamento consistente entre o documento oficial em PDF e o registro de áudio/vídeo -- só se estabeleceu de forma padronizada a partir de março de 2020. Esta delimitação temporal assegurou a integridade do conjunto de dados emparelhados e a representatividade do ambiente de gravação, que passou a incluir formatos de reunião remotos e híbridos.
+
+\subsection{Discussão da Estratégia de Coleta de Dados}
+\label{sec:discussao-coleta}
+
+O volume potencial e a complexidade dos dados a serem processados inviabilizaram a coleta manual, sendo necessária a construção de um módulo de automação. Durante o planejamento da aquisição, considerou-se inicialmente o uso de técnicas tradicionais de \textit{Web Scrapping}. No entanto, a investigação do comportamento da página, realizada por meio de ferramentas de desenvolvedor, revelou que as URLs dos arquivos eram construídas a partir de requisições a uma \textbf{API de dados subjacente}.
+
+Optou-se pela extração direta por meio de requisições à API (utilizando a biblioteca \textit{requests}) em vez do processamento do HTML. Essa decisão técnica demonstrou ser significativamente mais \textbf{robusta} e \textbf{resiliente} a futuras alterações visuais no \textit{frontend} do site, garantindo a estabilidade da automação ao interagir diretamente com a camada de dados estruturados (JSON).
+
+\section{Otimizações de Desempenho e Gerenciamento de Dados}
+\label{sec:otimizacoes-desempenho}
+
+O grande volume de arquivos brutos (PDFs e áudios WebM), somado à limitação de espaço de armazenamento disponível para o desenvolvimento, motivou a implementação de uma estratégia de gestão de recursos.
+
+A principal otimização realizada foi a implementação da lógica de acesso \textbf{\textit{on-demand}} no módulo de coleta. Por meio desta estratégia, os arquivos são baixados localmente apenas no momento exato em que são necessários para o processamento de uma determinada reunião e são subsequentemente excluídos ao final da iteração. Esta solução foi essencial para minimizar o consumo total de espaço em disco e acelerar o fluxo operacional, evitando gargalos de I/O (Input/Output).
+
+\subsection{Desafios no Processamento de Documentos e Áudio}
+\label{sec:desafios-processamento}
+
+A análise exploratória da natureza dos dados brutos revelou desafios específicos que demandaram otimizações rigorosas na \hyperref[sec:processamento-de-dados]{etapa de Processamento de Dados} (Capítulo 3).
+
+\subsubsection{Tratamento de Arquivos PDF}
+
+A inspeção inicial dos documentos PDFs revelou que uma parcela significativa dos arquivos não possuía texto embutido, indicando que se tratavam de \textbf{digitalizações de documentos físicos} em formato de imagem. Essa descoberta técnica justificou a necessidade obrigatória de implementar um fluxo de trabalho que envolvesse o Reconhecimento Óptico de Caracteres (OCR) via Tesseract para todos os documentos, garantindo a conversão de todos os registros em texto editável, independentemente de sua origem.
+
+\subsubsection{Qualidade Acústica do Áudio}
+
+A análise qualitativa das faixas de áudio demonstrou que as gravações de sessões plenárias apresentavam diversos problemas de qualidade acústica que poderiam comprometer a acurácia do modelo de ASR:
+\begin{itemize}
+    \item \textbf{Variações de Volume:} Discrepâncias abruptas na intensidade da voz devido ao uso de microfones fixos.
+    \item \textbf{Ruído de Fundo:} Níveis elevados de ruído ambiente e interferências causadas por microfones abertos.
+    \item \textbf{Reverberação e Eco:} Presença de captação indireta de áudio, especialmente nas falas de participantes remotos.
+\end{itemize}
+Estes fatores evidenciaram que o pré-processamento rigoroso, incluindo a aplicação de filtros de normalização dinâmica (\textit{dynaudnorm}) e redução de ruído (arnndn), seria fundamental para maximizar a precisão do modelo Whisper, conforme detalhado na próxima seção.
+
+\section{Processamento de dados}
+
+\subsection{Processamento de Áudio}
+
+A aplicação do modelo Pyannote aos áudios pré-processados produziu uma segmentação inicial precisa, porém caracterizada por fragmentações frequentes dentro de falas contínuas. Diversas reuniões apresentaram trechos curtos e adjacentes atribuídos ao mesmo locutor, ocasionados por pequenas variações acústicas, respirações ou ruídos residuais do ambiente.
+
+O pós-processamento desenvolvido mostrou-se eficaz na correção dessas fragmentações. O uso do limiar obtido pelo método Multi-Otsu permitiu identificar pausas intralocutor compatíveis com a continuidade natural da fala, resultando na fusão de trechos que haviam sido indevidamente divididos. Como consequência, observou-se uma redução significativa no número total de segmentos e um aumento expressivo na duração média dos trechos atribuídos a cada interlocutor.
+
+Além disso, a heurística voltada para sobreposições mínimas entre segmentos de falantes distintos evitou classificações incorretas, reduzindo casos nos quais uma mesma fala era erroneamente atribuída a dois interlocutores diferentes devido a falhas de delimitação. Esse ajuste contribuiu para maior coerência temporal dos turnos de fala e para a diminuição de erros de identificação.
+
+De modo geral, o refinamento aplicado aos segmentos resultou em uma diarização mais consistente e alinhada às características reais das interações registradas, favorecendo a etapa subsequente de transcrição e melhorando a qualidade das análises derivadas.
