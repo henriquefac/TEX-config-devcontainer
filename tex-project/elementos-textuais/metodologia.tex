@@ -41,6 +41,34 @@ Especificamente para os arquivos de áudio e vídeo hospedados no YouTube, foi n
 
 Com isso, foi estabelecido um canal de acesso em tempo real aos dados brutos de interesse para a aplicação. Todos os próximos passos em relação ao desenvolvimento foram feitos a partir desse ponto, aproveitando a disponibilidade e formatação constante dos dados. Para a construção do \textit{dataset} final, esses dados brutos ainda precisariam passar por uma fase de pré-processamento a fim de padronizar as informações no formato de texto.
 
+
+\section{Caracterização dos Dados}
+\label{sec:caracterizacao-dados}
+
+Após a etapa de coleta, procedeu-se à caracterização do conjunto de dados utilizado neste trabalho, com o objetivo de compreender suas propriedades estruturais, variabilidades e potenciais limitações. Essa etapa é essencial para orientar tanto o pré-processamento quanto as etapas posteriores de análise e transcrição.
+
+O conjunto de dados é composto por pares de documentos referentes às sessões do Plenário do Tribunal Regional Eleitoral do Ceará (TRE-CE), abrangendo o período de março de 2020 a outubro de 2025. Cada reunião é representada por dois elementos principais:
+
+\begin{enumerate}
+    \item \textbf{Documento PDF da ata oficial}, contendo o registro formal da sessão, incluindo votos, decisões e deliberações. Esses documentos apresentam heterogeneidade estrutural, podendo conter texto pesquisável ou serem compostos por imagens digitalizadas provenientes de escaneamento, o que exige tratamento diferenciado no processo de extração textual.
+    
+    \item \textbf{Gravação de áudio da reunião}, disponibilizada originalmente em formato \textit{webm}. As faixas de áudio apresentam características acústicas variáveis devido a fatores como captação por microfones fixos, diferenças de volume entre interlocutores, presença de eco e reverberação, ruído ambiente e intervenções de participantes remotos captadas indiretamente pelos alto-falantes da sala.
+\end{enumerate}
+
+Ao todo, o conjunto de dados apresenta variações significativas quanto à qualidade dos documentos e do áudio, refletindo a natureza realista do ambiente institucional de onde se originam. Entre os aspectos observados destacam-se:
+
+\begin{itemize}
+    \item presença recorrente de ruído estacionário e intermitente nas gravações;
+    \item períodos extensos de silêncio no início e no fim dos arquivos de áudio;
+    \item diferenças de intensidade e clareza entre falas, decorrentes da posição física dos microfones;
+    \item diversidade na formatação dos PDFs, especialmente entre arquivos digitalizados e nativos;
+    \item variações na duração total das reuniões, afetando o volume de dados por sessão.
+\end{itemize}
+
+Além disso, o conjunto não contém anotações prévias de estruturação textual nem transcrições alinhadas entre áudio e PDF, o que reforça a necessidade de um pipeline dedicado para padronização e processamento.
+
+Essa caracterização permitiu identificar desafios específicos que influenciam diretamente o desempenho das etapas posteriores, como o reconhecimento automático de fala, a diarização de locutores e o alinhamento entre as transcrições e as atas oficiais. Com base nessas observações, foram definidas as estratégias de pré-processamento descritas nas seções seguintes.
+
 \section{Processamento de Dados}
 \label{sec:processamento-de-dados}
 
