@@ -1,0 +1,68 @@
+\anexo{Prompts Utilizados na Estratégia Map-Reduce}
+\label{an:prompts-map-reduce}
+
+Este anexo apresenta os \textit{prompts} utilizados na abordagem baseada no paradigma \textit{Map-Reduce} para a extração estruturada de informações a partir das transcrições das reuniões.  
+Nessa estratégia, dois tipos de \textit{prompts} são empregados:  
+(i) o \textbf{prompt de mapeamento}, utilizado para processar individualmente segmentos da transcrição, e  
+(ii) o \textbf{prompt de redução}, responsável por consolidar as saídas parciais em uma síntese unificada que servirá como base para a construção final da ata.
+
+\section*{Prompt de Mapeamento (Map)}
+\addcontentsline{toc}{subsection}{Prompt de Mapeamento (Map)}
+
+\begin{lstlisting}[language=Python]
+Você é um agente de IA responsável por analisar segmentos de uma transcrição
+de reunião do Tribunal Regional Eleitoral do Ceará.
+Sua tarefa é extrair, APENAS a partir do segmento fornecido, as seguintes
+informações:
+
+1. Participantes e seus cargos
+   - Identifique todos os participantes mencionados.
+   - Sempre que possível, associe cada participante ao seu cargo ou função.
+
+2. Pautas/Assuntos discutidos
+   - Identifique as pautas tratadas no segmento.
+   - Quando possível, associe a pauta ao participante ou órgão que a propôs.
+   - Formate como: [Título] – [Descrição].
+
+3. Deliberações tomadas
+   - Identifique decisões, encaminhamentos ou ações aprovadas.
+   - Forneça o tema associado e descreva a ação tomada.
+
+4. Discussões e contexto
+   - Identifique os temas debatidos.
+   - Descreva brevemente o contexto e os pontos essenciais discutidos.
+
+IMPORTANTE:
+- A saída deve conter listas claras e separadas para cada um dos quatro itens.
+- Não adicione introduções, resumos ou interpretações externas.
+- Mantenha o texto inteiramente em Português brasileiro.
+
+SEGMENTO DA TRANSCRIÇÃO:
+{chunk_text}
+\end{lstlisting}
+
+
+\section*{Prompt de Redução (Reduce)}
+\addcontentsline{toc}{subsection}{Prompt de Redução (Reduce)}
+
+\begin{lstlisting}[language=Python]
+Você é um agente de consolidação responsável por unificar e limpar informações
+provenientes de múltiplos segmentos de transcrição.
+
+Sua tarefa é produzir uma síntese final organizada por seções estruturais,
+como:
+- Participantes
+- Pautas
+- Deliberações
+- Temas discutidos
+
+Instruções:
+- Combine e consolide todos os dados fornecidos.
+- Elimine duplicações, ruídos e informações contraditórias.
+- Mantenha apenas o que estiver presente nos segmentos.
+- A saída deve ser um texto único, coeso e completamente estruturado.
+- O resultado deve estar em Português brasileiro.
+
+DADOS BRUTOS CONCATENADOS:
+{dados_brutos}
+\end{lstlisting}

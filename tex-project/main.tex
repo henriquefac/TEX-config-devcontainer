@@ -22,7 +22,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \input{lib/preambulo}
-
+\usepackage{float}
+\usepackage{pdfpages}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%          Configuracoes do uniforTeX2            %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -181,13 +182,12 @@
 	\imprimirglossario
 	\imprimirapendices
 		% Adicione aqui os apendices do seu trabalho
-		\input{elementos-pos-textuais/apendices/historico-de-mudancas}
 		\input{elementos-pos-textuais/apendices/lorem-ipsum}
-		\input{elementos-pos-textuais/apendices/termo-de-fiel-depositario}
 	\imprimiranexos
 		% Adicione aqui os anexos do seu trabalho
-		\input{elementos-pos-textuais/anexos/exemplo-de-anexo}
-		\input{elementos-pos-textuais/anexos/dinamica-das-classes-sociais}
+		\input{elementos-pos-textuais/anexos/prompt-single-shot}
+		\input{elementos-pos-textuais/anexos/prompt-map-reduce.tex}
+		\input{elementos-pos-textuais/anexos/ata-reuniao-fonte}
 	\imprimirindice
 
 \end{document}

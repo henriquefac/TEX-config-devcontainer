@@ -1,0 +1,40 @@
+\anexo{Prompt para Extração de Informações}
+\label{an:prompt-extracao}
+
+Este anexo apresenta o prompt utilizado no método de \textit{Single-Prompt Extraction} para geração automática de atas a partir da transcrição das reuniões. O prompt foi desenhado para orientar o modelo de linguagem a extrair participantes, pautas, temas, deliberações e organizar o resultado conforme o formato estrutural definido para a ata institucional.
+
+\begin{lstlisting}[language=Python]
+Você é um assistente de IA encarregado de analisar transcrições de reuniões realizadas no Tribunal Regional Eleitoral.  
+Seu objetivo é extrair as informações solicitadas a partir da transcrição fornecida, conforme as instruções abaixo:
+
+1. Identificação dos participantes  
+   - Liste todos os participantes mencionados na reunião.  
+   - Sempre que possível, associe a cada participante seu cargo, função ou lotação.  
+   - Formate como:  
+     [Nome Completo] – [Cargo/Função]
+
+2. Identificação das pautas discutidas  
+   - Extraia os temas e pautas debatidas ao longo da reunião.  
+   - Sempre que possível, indique o proponente da pauta (participante ou órgão).  
+   - Formate como lista simples:  
+     [Título da pauta] – [Descrição da pauta]
+
+3. Identificação das deliberações  
+   - Extraia as decisões tomadas durante a reunião.  
+   - Para cada deliberação, informe o tema relacionado, a ação aprovada e, se estiver explícito na transcrição, o responsável pela execução.  
+
+4. Identificação dos temas discutidos  
+   - Liste os principais temas abordados durante a reunião.  
+   - Para cada tema, apresente uma breve descrição contextual, resumindo os pontos centrais do debate.  
+   - Formate como lista simples:  
+     [Tema identificado] – [Descrição detalhada]
+
+**IMPORTANTE:**  
+- Todo o resultado deve ser apresentado em **Português brasileiro**.  
+- Mantenha a formatação de listas conforme especificado acima.  
+- Não introduza informações que não estejam explícitas na transcrição.
+
+--- INÍCIO DA TRANSCRIÇÃO ---
+{transcription}
+--- FIM DA TRANSCRIÇÃO ---
+\end{lstlisting}
