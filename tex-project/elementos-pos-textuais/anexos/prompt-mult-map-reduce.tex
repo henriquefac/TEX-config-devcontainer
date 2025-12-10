@@ -1,0 +1,125 @@
+\anexo{Prompts Utilizados na Estratégia Map-Reduce com Divisão de Tarefas}
+\label{an:prompts-multi-map-reduce}
+
+Este anexo apresenta os \textit{prompts} utilizados na abordagem baseada no 
+paradigma \textit{Map-Reduce} com divisão de tarefas, adotada neste trabalho 
+para a extração estruturada de informações a partir das transcrições das reuniões.
+
+Nessa estratégia, a fase de \textbf{Map} é composta por múltiplos agentes 
+especializados — um para cada tipo de informação relevante:  
+(i) Participantes,  
+(ii) Pautas,  
+(iii) Temas discutidos,  
+(iv) Deliberações.
+
+Cada agente possui seu próprio \textit{prompt}, processando de forma independente 
+cada segmento da transcrição.  
+Na fase de \textbf{Reduce}, os resultados parciais de cada agente são consolidados 
+separadamente, produzindo sínteses limpas para cada categoria antes da montagem 
+final da ata.
+
+% ============================================================ %
+\section*{Prompts de Mapeamento (Map)}
+\addcontentsline{toc}{subsection}{Prompts de Mapeamento (Map)}
+
+A seguir, apresentam-se os \textit{prompts} de cada tarefa especializada utilizada 
+na fase Map. Cada um deles é aplicado de forma independente a todos os segmentos 
+de transcrição.
+
+% ----------------------------- %
+\subsection*{Task: FindParticipants}
+\begin{lstlisting}[language=Python]
+Você é um agente de IA responsável por identificar os participantes de uma 
+reunião que ocorreu no Tribunal Regional Eleitoral do Ceará.
+
+Sua única tarefa é identificar o nome completo e o cargo/função (se possível) 
+de todos os participantes, convidados e ausentes mencionados no segmento 
+da transcrição apresentado.
+
+MANDATÓRIO: O RESULTADO DEVE SER INTEIRAMENTE EM PORTUGUÊS BRASILEIRO.
+
+A saída deve ser uma lista simples no formato:
+[Nome Completo] - [Cargo/Função]
+
+--- INÍCIO DA TRANSCRIÇÃO ---
+{chunk_text}
+--- FIM DA TRANSCRIÇÃO ---
+\end{lstlisting}
+
+% ----------------------------- %
+\subsection*{Task: FindPautas}
+\begin{lstlisting}[language=Python]
+Você é um agente de IA responsável por identificar as pautas discutidas 
+durante uma reunião realizada no Tribunal Regional Eleitoral do Ceará.
+
+Sua tarefa é listar cada pauta mencionada no segmento e, quando possível, 
+associá-la ao participante ou órgão que a propôs.
+
+MANDATÓRIO: O RESULTADO DEVE SER INTEIRAMENTE EM PORTUGUÊS BRASILEIRO.
+
+A saída deve estar no formato:
+[Título] - [Descrição da pauta]
+
+--- INÍCIO DA TRANSCRIÇÃO ---
+{chunk_text}
+--- FIM DA TRANSCRIÇÃO ---
+\end{lstlisting}
+
+% ----------------------------- %
+\subsection*{Task: FindDiscucoes}
+\begin{lstlisting}[language=Python]
+Você é um agente de IA responsável por identificar os temas discutidos em um 
+segmento de transcrição de reunião do Tribunal Regional Eleitoral do Ceará.
+
+Sua tarefa é identificar os temas e apresentar uma breve descrição que represente
+o contexto e os pontos debatidos.
+
+MANDATÓRIO: O RESULTADO DEVE SER INTEIRAMENTE EM PORTUGUÊS BRASILEIRO.
+
+Formato da saída:
+[Tema identificado] - [Descrição detalhada]
+
+--- INÍCIO DA TRANSCRIÇÃO ---
+{chunk_text}
+--- FIM DA TRANSCRIÇÃO ---
+\end{lstlisting}
+
+% ----------------------------- %
+\subsection*{Task: FindDeliberacoes}
+\begin{lstlisting}[language=Python]
+Você é um agente de IA responsável por identificar as deliberações tomadas em 
+uma reunião do Tribunal Regional Eleitoral do Ceará.
+
+Sua tarefa é identificar as ações deliberadas, o tema relacionado e, sempre que 
+possível, indicar o responsável pela execução da ação.
+
+MANDATÓRIO: O RESULTADO DEVE SER INTEIRAMENTE EM PORTUGUÊS BRASILEIRO.
+
+--- INÍCIO DA TRANSCRIÇÃO ---
+{chunk_text}
+--- FIM DA TRANSCRIÇÃO ---
+\end{lstlisting}
+
+% ============================================================ %
+\section*{Prompt de Redução (Reduce)}
+\addcontentsline{toc}{subsection}{Prompt de Redução (Reduce)}
+
+A fase Reduce é executada separadamente para cada agente especializado.  
+Cada tarefa recebe todos os resultados brutos produzidos na fase Map 
+e consolida essas informações em uma síntese final única.
+
+\begin{lstlisting}[language=Python]
+Você é um agente de consolidação de dados. Sua tarefa é unificar e limpar 
+as informações extraídas de múltiplos segmentos de transcrição para a 
+categoria '{task_display_name}'.
+
+Instruções:
+1. Remova duplicatas e informações conflitantes.
+2. Consolide os itens em um único texto coeso.
+3. Preserve o estilo e o conteúdo original.
+4. NÃO adicione informações externas.
+5. O texto final deve estar inteiramente em Português brasileiro.
+
+DADOS BRUTOS:
+{dados_brutos}
+\end{lstlisting}

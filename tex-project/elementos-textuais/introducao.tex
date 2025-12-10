@@ -4,7 +4,7 @@ O campo de pesquisa conhecido como \gls{ia}, reconhecido como um dos domínios m
 
 A magnitude de seu impacto é tamanha que figuras proeminentes da indústria tecnológica vêm se pronunciando de forma audaciosa sobre suas expectativas em relação a essa tecnologia emergente. Sundar Pichai, CEO da Google, declarou que "a inteligência artificial é mais profunda do que a eletricidade ou fogo", enfatizando o potencial disruptivo dessa tecnologia IA.
 
-Após períodos de estagnação, denominados "Inverno da Inteligencia Artificial"  \\ \cite{russell_artificial_2016} --- marcados pela frustração de expectativa e pela retração de investimentos --- o campo tem experimentado, nas últimas décadas, um crescimento exponencial. Esse avanço tem se destacado especialmente no subcampo conhecido como \gls{pln}, notoriamente com o advento dos \gls{llm}s, revolucionando a forma como sistemas computacionais interagem com a linguagem humana. Entre os modelos mais notáveis estão os da família GPT (Generative Pre-trained Transformer) e o LLaMA (Large Language Model Meta AI), ambos classificados como \gls{llm}s de propósito geral.
+Após períodos de estagnação, denominados "Inverno da Inteligencia Artificial"  \\ \cite{russell_artificial_2016}, marcados pela frustração de expectativa e pela retração de investimentos, o campo tem experimentado, nas últimas décadas, um crescimento exponencial. Esse avanço tem se destacado especialmente no subcampo conhecido como \gls{pln}, notoriamente com o advento dos \gls{llm}s, revolucionando a forma como sistemas computacionais interagem com a linguagem humana. Entre os modelos mais notáveis estão os da família GPT (Generative Pre-trained Transformer) e o LLaMA (Large Language Model Meta AI), ambos classificados como \gls{llm}s de propósito geral.
 
 A eficiência dos LLMs na manipulação da linguagem natural deve-se, em grande parte, à arquitetura Transformers, proposta por \citeonline{vaswani_attention_2017}. Essa arquitetura é baseada no mecanismo de atenção, mais especificamente na chamada self-attention, que possibilita a análise contextual de cada elemento textual (token), independente da sua posição na sequência. Assim, cada token é processado não apenas considerando seu significado isolado, mas também seu contexto em relação aos outros tokens de entrada.  
 
@@ -39,8 +39,7 @@ Apesar de sua relevância, a produção de atas ainda é, majoritariamente, uma 
 \subsection{Objetivo Geral}
 \label{sec:objetivo-geral}
 
-A proposta envolve a criação de uma solução capaz de processar transcrições estruturadas e extrair automaticamente informações essenciais, como: lista de participantes e seus respectivos cargos ou funções, pautas deliberadas, unidades proponentes, pautas extraordinárias sugeridas durante a reunião, assuntos discutidos e deliberações finais.
-
+A proposta envolve a criação de uma solução capaz de processar transcrições estruturadas e extrair automaticamente informações essenciais, como: lista de participantes e seus respectivos cargos ou funções, pautas discutidas ao longo de reunião, assuntos discutidos e deliberações finais.
 
 \subsection{Objetivos Específicos}
 \label{sec:objetivos-especificos}
@@ -49,9 +48,8 @@ Com essa abordagem, busca-se promover maior agilidade, precisão e padronizaçã
 
 	\begin{alineas}
 		\item  Investigar o uso de modelos avançados de inteligência artificial na automação da extração de informações a partir de transcrições de reuniões
-		\item Analisar o impacto de diferentes configurações dos modelos e de prompts sobre a qualidade das respostas geradas
 		\item Implementação do código fonte do sistema capaz de gerar atas a partir da transcrição de reuniões.
 		\item Testar e comparar o desempenho de diversos modelos de linguagem natural em condições controladas, avaliando critérios como precisão, consistência e adequação às necessidades do domínio jurídico.
 	\end{alineas}
 
-Ao final da pesquisa, espera-se atingir dois resultados principais: (i) gera conclusões quanto ao desempenho dos modelos de LLM utilizados na tarefa de automação de Atas de reunião e como pode se aplicar para outros documentos; e (ii) a entrega de uma aplicação funcional, configurada como um produto mínimo viável (MVP), que integre todos os componentes desenvolvidos e comprove a viabilidade técnica e prática da solução. A aplicação deverá apresentar uma arquitetura escalável, eficiente e com potencial de uso real em ambientes institucionais.
+Ao final da pesquisa, espera-se atingir dois resultados principais: (i) gera conclusões quanto ao desempenho dos modelos de LLM utilizados na tarefa de automação de Atas de reunião e como pode se aplicar para outros documentos; e (ii) a entrega de uma solução, com capacidades mínimas para atender as necessidades impostas pelo desafio e gerar resultados satisfatórios.
