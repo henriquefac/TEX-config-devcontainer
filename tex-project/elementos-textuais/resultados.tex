@@ -1,9 +1,15 @@
 \chapter{Resultados}
 \label{chap:resultados}
 
-\section{Coleta de dados}
+Esta seção apresenta os principais resultados obtidos ao longo do desenvolvimento desta pesquisa. São descritos o \textit{dataset} construído, as características identificadas durante sua análise e os resultados produzidos pela aplicação da técnica proposta para a extração e estruturação automática de informações de atas de reunião, bem como observações relevantes decorrentes da execução do sistema e da consolidação da solução final adotada.
 
-Este conjunto de dados emparelhados é indispensável, não apenas para a validação da aplicação final e a medição de seu desempenho, mas também para a construção do fluxo do sistema em suas fases de processamento. A utilização de dados reais, que espelham o ambiente final de implantação, permitiu o alinhamento e o refinamento dos módulos de aquisição, pré-processamento e análise de forma robusta e representativa.
+Adicionalmente, são apresentados os resultados das métricas extraídas tanto dos produtos intermediários do sistema, correspondentes às sínteses geradas a partir das transcrições, quanto do resultado final, representado pelo conjunto de dados estruturados no formato JSON. Esses resultados são majoritariamente expressos por meio de gráficos e medidas estatísticas, possibilitando a análise do comportamento da solução sob diferentes perspectivas e uma avaliação mais abrangente de seu desempenho e de suas propriedades informacionais.
+
+\section{Base de Dados Construída}
+
+O \textit{dataset} construído para este trabalho, a partir dos registros de vídeo das reuniões do Tribunal Regional Eleitoral do Ceará, disponibilizados em sua página oficial, teve como objetivo subsidiar o processo de desenvolvimento e validação dos métodos de inferência apresentados na seção de Metodologia, além de servir como conjunto de dados de entrada para a solução final, permitindo a avaliação de sua efetividade.
+
+Esse conjunto de dados emparelhados mostrou-se indispensável não apenas para a validação da aplicação final e a mensuração de seu desempenho, mas também para a definição e o refinamento do fluxo do sistema em suas diferentes etapas de processamento. A utilização de dados reais, que refletem o ambiente efetivo de implantação da solução, possibilitou o ajuste mais preciso dos módulos de aquisição, pré-processamento e análise, conferindo maior robustez e representatividade aos experimentos realizados.
 
 Essa escolha se deu principalemnte por causa da estrutura dos registros a partir da data inicial, que passaram a consistir numa dupla: ata de reunião e registro de vídeo da reunião.
 
