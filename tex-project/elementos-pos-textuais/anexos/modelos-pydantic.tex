@@ -1,0 +1,66 @@
+\anexo{Modelos de dados utilizados na etapa de estruturação}
+\label{an:modelos-pydantic}
+
+Este anexo apresenta os modelos de dados desenvolvidos com a biblioteca \textit{Pydantic} e utilizados na etapa de estruturação das informações extraídas das transcrições de reuniões.
+
+Os modelos definem formalmente os esquemas de saída empregados pelos modelos de linguagem por meio da funcionalidade de \textit{structured output}, garantindo padronização, validação automática e consistência semântica dos dados estruturados referentes a participantes, pautas, discussões e deliberações.
+
+Cada modelo especifica explicitamente os campos esperados, seus tipos, descrições semânticas e exemplos ilustrativos, servindo tanto como contrato de saída quanto como mecanismo de validação dos resultados gerados.
+\\
+\\
+\\
+
+\subsection*{Modelo de Participantes}
+
+\begin{lstlisting}[caption={Modelo Pydantic para representação de participantes}]
+class Pessoa(BaseModel):
+    """Representa uma única pessoa com nome e função."""
+    nome: str = Field(..., description="O nome completo do participante.")
+    cargo: str = Field(
+        default="Não identificado",
+        description="O cargo ou função do participante."
+    )
+
+class ParticipantesEncontradosDetalhado(BaseModel):
+    participantes: List[Pessoa]
+\end{lstlisting}
+
+\pagebreak
+
+\subsection*{Modelo de Pautas}
+
+\begin{lstlisting}[caption={Modelo Pydantic para estruturação das pautas}]
+class Pautas(BaseModel):
+    titulo: str
+    descricao: str
+    responsavel: str = ""
+
+class PautasEncontradas(BaseModel):
+    pautas: List[Pautas]
+\end{lstlisting}
+
+
+\subsection*{Modelo de Discussões}
+
+\begin{lstlisting}[caption={Modelo Pydantic para estruturação das discussões}]
+class Discussao(BaseModel):
+    assunto: str
+    contexto: str
+
+class DiscursoesEncontradas(BaseModel):
+    discussoes: List[Discussao]
+\end{lstlisting}
+
+
+\subsection*{Modelo de Deliberações}
+
+\begin{lstlisting}[caption={Modelo Pydantic para estruturação das deliberações}]
+class Deliberacao(BaseModel):
+    assunto: str
+    acao: str
+    responsavel: str = "Não encontrado"
+    prazo: str = "Não identificado"
+
+class DeliberacoesEncontradas(BaseModel):
+    deliberacoes: List[Deliberacao]
+\end{lstlisting}

@@ -24,6 +24,23 @@
 \input{lib/preambulo}
 \usepackage{float}
 \usepackage{pdfpages}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+  keywordstyle=\ttfamily,
+  commentstyle=\ttfamily,
+  stringstyle=\ttfamily,
+}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  captionpos=b
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%          Configuracoes do uniforTeX2            %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -182,11 +199,14 @@
 	\imprimirglossario
 	\imprimirapendices
 		% Adicione aqui os apendices do seu trabalho
-		\input{elementos-pos-textuais/apendices/lorem-ipsum}
+		% \input{elementos-pos-textuais/apendices/lorem-ipsum}
 	\imprimiranexos
 		% Adicione aqui os anexos do seu trabalho
 		\input{elementos-pos-textuais/anexos/prompt-single-shot}
 		\input{elementos-pos-textuais/anexos/prompt-map-reduce.tex}
+		\input{elementos-pos-textuais/anexos/sinteses-resultados}
+		\input{elementos-pos-textuais/anexos/modelos-pydantic}
+
 		\input{elementos-pos-textuais/anexos/ata-reuniao-fonte}
 	\imprimirindice
 

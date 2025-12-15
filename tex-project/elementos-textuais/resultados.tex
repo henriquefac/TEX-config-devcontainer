@@ -6,59 +6,166 @@ Esta seção apresenta os principais resultados obtidos ao longo do desenvolvime
 Adicionalmente, são apresentados os resultados das métricas extraídas tanto dos produtos intermediários do sistema, correspondentes às sínteses geradas a partir das transcrições, quanto do resultado final, representado pelo conjunto de dados estruturados no formato JSON. Esses resultados são majoritariamente expressos por meio de gráficos e medidas estatísticas, possibilitando a análise do comportamento da solução sob diferentes perspectivas e uma avaliação mais abrangente de seu desempenho e de suas propriedades informacionais.
 
 \section{Base de Dados Construída}
+\label{sec:base-de-dados-construida}
 
-O \textit{dataset} construído para este trabalho, a partir dos registros de vídeo das reuniões do Tribunal Regional Eleitoral do Ceará, disponibilizados em sua página oficial, teve como objetivo subsidiar o processo de desenvolvimento e validação dos métodos de inferência apresentados na seção de Metodologia, além de servir como conjunto de dados de entrada para a solução final, permitindo a avaliação de sua efetividade.
+O \textit{dataset} construído neste trabalho, a partir dos registros em vídeo das reuniões do Tribunal Regional Eleitoral do Ceará, disponibilizados em sua página oficial, teve como objetivo principal subsidiar o desenvolvimento e a validação dos métodos de inferência apresentados na seção de Metodologia. Além disso, esse conjunto de dados serviu como entrada para a solução proposta, permitindo a avaliação de sua efetividade em um cenário real de aplicação.
 
-Esse conjunto de dados emparelhados mostrou-se indispensável não apenas para a validação da aplicação final e a mensuração de seu desempenho, mas também para a definição e o refinamento do fluxo do sistema em suas diferentes etapas de processamento. A utilização de dados reais, que refletem o ambiente efetivo de implantação da solução, possibilitou o ajuste mais preciso dos módulos de aquisição, pré-processamento e análise, conferindo maior robustez e representatividade aos experimentos realizados.
+Esse conjunto de dados emparelhados mostrou-se essencial não apenas para a validação da aplicação final e a mensuração de seu desempenho, mas também para a definição e o refinamento do fluxo do sistema em suas diferentes etapas de processamento. A utilização de dados reais, representativos do ambiente efetivo de implantação da solução, possibilitou um ajuste mais preciso dos módulos de aquisição, pré-processamento e análise, conferindo maior robustez e maior fidelidade aos experimentos realizados.
 
-Essa escolha se deu principalemnte por causa da estrutura dos registros a partir da data inicial, que passaram a consistir numa dupla: ata de reunião e registro de vídeo da reunião.
+O \textit{dataset} é constituído por pares de documentos em formato textual para cada registro de reunião, compostos pela ata oficial e pela respectiva transcrição da reunião, sendo esta última o principal objeto de interesse deste estudo. Conforme descrito na metodologia, a partir de uma sequência de etapas de processamento, o áudio das gravações das reuniões foi convertido para o formato de texto, no qual cada fala dos interlocutores é organizada de acordo com a temporalidade dos eventos ocorridos.\\
 
-\section{Análise Exploratória e Justificativa do Dataset}
-\label{sec:analise-dataset}
+Cada segmento textual é estruturado contendo o \textit{timestamp} de início e fim da fala, um identificador anônimo do interlocutor e o conteúdo textual correspondente ao que foi proferido durante a reunião. Essa organização permitiu preservar a sequência lógica das interações, fornecendo uma base adequada para as etapas subsequentes de segmentação, síntese e extração estruturada das informações.
 
-A seleção do período de dados a ser processado (março de 2020 a outubro de 2025) foi definida com base em uma análise exploratória dos registros disponíveis no portal do TRE-CE. Embora o portal ofereça dados de sessões plenárias anteriores, verificou-se que a **estrutura documental necessária** para a validação da aplicação -- o pareamento consistente entre o documento oficial em PDF e o registro de áudio/vídeo -- só se estabeleceu de forma padronizada a partir de março de 2020. Esta delimitação temporal assegurou a integridade do conjunto de dados emparelhados e a representatividade do ambiente de gravação, que passou a incluir formatos de reunião remotos e híbridos.
+Ainda assim, o conjunto de dados resultante apresentou diversidade suficiente para permitir a análise do comportamento da aplicação em diferentes cenários. A Figura~\ref{fig:histograma-tamanho-transcricoes} apresenta a distribuição do número de caracteres das transcrições utilizadas, enquanto a Figura~\ref{fig:histograma-duracao-transcricoes} ilustra a distribuição da duração das reuniões, em segundos.
 
-\subsection{Discussão da Estratégia de Coleta de Dados}
+\begin{figure}[h!]
+	\centering
+	\Caption{\label{fig:histograma-tamanho-transcricoes}
+	Histograma da distribuição do número de caracteres por transcrição no \textit{dataset}}
+	\UNIFORfig{}{
+		\includegraphics[width=15cm]{figuras/H1_tamanho_arquivos_caracteres}
+	}{
+	\Fonte{Elaboração própria}
+	}
+\end{figure}
+
+A Figura~\ref{fig:histograma-tamanho-transcricoes} apresenta a distribuição do número de caracteres das transcrições de áudio. Observa-se uma distribuição bimodal, com uma primeira concentração entre 0 e 20.000 caracteres (4 registros) e uma segunda, mais pronunciada, entre 40.000 e 60.000 caracteres, onde se encontra a maior frequência (7 registros). A distribuição apresenta ainda uma cauda longa à direita, ultrapassando o limite superior de 123 mil caracteres, definido a partir do critério de Tukey, indicando a presença de transcrições excepcionalmente extensas. \clearpage
+
+\begin{figure}[]
+	\centering
+	\Caption{\label{fig:histograma-duracao-transcricoes}
+	Histograma da distribuição da duração das reuniões presentes no \textit{dataset}}
+	\UNIFORfig{}{
+		\includegraphics[width=15cm]{figuras/H2_duracao_arquivos_segundos}
+	}{
+	\Fonte{Elaboração própria}
+	}
+\end{figure}
+
+De forma análoga, a Figura~\ref{fig:histograma-duracao-transcricoes} apresenta a distribuição da duração das reuniões, em segundos. A distribuição também é bimodal, com uma primeira moda entre 0 e 1.000 segundos e uma segunda, mais frequente (7 registros), situada entre 4.800 e 5.600 segundos. A duração média observada foi de 4.176,48 segundos (aproximadamente 69,6 minutos). Assim como no caso do tamanho das transcrições, identifica-se uma cauda longa à direita, com o limite superior de Tukey atingindo 9.009,54 segundos.
+
+Comparando lado a lado os gráficos da Figura~\ref{fig:histograma-tamanho-transcricoes} e Figura~\ref{fig:histograma-duracao-transcricoes}, é possível observar um elevado grau de equivalência no seu formato. Ambos demonstram um padrão bimodal com cauda para a direita, bem como uma similaridade na posição dos eixos representando as métricas calculadas (média e limites de Tukey). Essa forte correlação entre o tamanho total das transcrições (em caracteres) e a duração total das reuniões (em segundos) é um indicativo robusto da qualidade das transcrições, confirmando sua fidelidade e o alinhamento esperado com o conteúdo original de áudio. \pagebreak
+
+Ainda, foi possível realizar uma análise mais profunda quanto à granularidade dos dados, focando no tamanho e na duração dos segmentos individuais (falas dos interlocutores). A seguir, temos os graficos gerados a partir da distribuição no formato de histograma das respectivas métricas, tamnho em caracteres das falas indentificadas na transcrição das reuniões (Figura~\ref{fig:histograma-tamanho-de-cada-segmento-na-transcricao}) e duração das falas por interlocutor indetificado na reunião (Figura~\ref{fig:histograma-duracao-de-cada-fala-na-reuniao}).
+
+\begin{figure}[h!]
+	\centering
+	\Caption{\label{fig:histograma-tamanho-de-cada-segmento-na-transcricao}
+	Histograma da distribuição do número de caracteres das falas por participantes que identificadas nas transcrições presentes no \textit{dataset}}
+	\UNIFORfig{}{
+		\includegraphics[width=15cm]{figuras/H3_tamanho_falas_caracteres}
+	}{
+	\Fonte{Elaboração própria}
+	}
+\end{figure}
+
+A Figura~\ref{fig:histograma-tamanho-de-cada-segmento-na-transcricao} ilustra a distribuição do tamanho individual dos segmentos de fala, medidos em caracteres. O gráfico exibe uma distribuição marcadamente assimétrica à direita, com a frequência máxima concentrada na primeira faixa (0 a 300 caracteres). 
+
+Isso é esperado em reuniões formais, onde a maioria das intervenções é breve (votos, confirmações, perguntas curtas), mas há segmentos de fala \textit{outliers} que representam exposições longas de um único interlocutor. O limite superior de Tukey (755,00 caracteres) é ultrapassado por falas que podem chegar a mais de 16.000 caracteres, desafiando a estabilidade da diarização e a segmentação de conteúdo.
+
+\begin{figure}[h!]
+	\centering
+	\Caption{\label{fig:histograma-duracao-de-cada-fala-na-reuniao}
+	Histograma da distribuição da duração das falas por participantes que identificadas nas reuniões presentes no \textit{dataset} como transcrições}
+	\UNIFORfig{}{
+		\includegraphics[width=15cm]{figuras/H4_duracao_falas_segundos}
+	}{
+	\Fonte{Elaboração própria}
+	}
+\end{figure}
+
+De forma similar, a Figura~\ref{fig:histograma-duracao-de-cada-fala-na-reuniao} mostra a distribuição da duração dos segmentos de fala, em segundos. A distribuição apresenta uma forma fortemente inclinada à direita, com a esmagadora maioria dos mais de 3.000 segmentos concentrada abaixo de 30 segundos. A duração média da fala é de 28,77 segundos, denotando a alta concentração de dados à esquerda. O limite superior de Tukey de 61,32 segundos é frequentemente superado, com outliers de fala atingindo mais de 1.000 segundos.
+
+As distribuições apresentadas nas Figuras~\ref{fig:histograma-tamanho-de-cada-segmento-na-transcricao} e~\ref{fig:histograma-duracao-de-cada-fala-na-reuniao} evidenciam uma correlação direta entre o tamanho textual e a duração temporal dos segmentos de fala. Ambas são unimodais e fortemente assimétricas à direita, com maior concentração de segmentos curtos e uma cauda longa associada a falas extensas. Esse comportamento confirma a heterogeneidade das interações e atesta a robustez do módulo de diarização e segmentação empregado.
+
+Quanto ao registro das Atas capturadas para a formação do \textit{dataset}, sua principal e única função foi servir de \textit{gold-standard} para comparar com os resultados gerados pela solução desenvolvida. No conjunto de dados, elas estão constituídas como um conjunto de arquivos de texto associadas ao seu respectivo para (documento de texto da transcrição), cujo conteúdo é produto do processo de extração detalhada na sessão de Metodologia~\ref{sec:processamento-de-arquivos-PDF}. Seu principal propósito nesse trabalho é servir como parâmetro \textit{gold-standard}
+
+\subsection{Implementação de Acesso Dinâmico (\textit{On-Demand})}
 \label{sec:discussao-coleta}
 
-O volume potencial e a complexidade dos dados a serem processados inviabilizaram a coleta manual, sendo necessária a construção de um módulo de automação. Durante o planejamento da aquisição, considerou-se inicialmente o uso de técnicas tradicionais de \textit{Web Scrapping}. No entanto, a investigação do comportamento da página, realizada por meio de ferramentas de desenvolvedor, revelou que as URLs dos arquivos eram construídas a partir de requisições a uma \textbf{API de dados subjacente}.
+O volume potencial e a complexidade dos dados a serem processados inviabilizaram a coleta manual, sendo necessária a construção de um módulo de automação. Durante o planejamento da aquisição, considerou-se inicialmente o uso de técnicas tradicionais de \textit{Web Scrapping}. No entanto, a investigação do comportamento da página, realizada por meio de ferramentas de desenvolvedor, revelou que as URLs dos arquivos eram construídas a partir de requisições a uma API de dados subjacente.
 
-Optou-se pela extração direta por meio de requisições à API (utilizando a biblioteca \textit{requests}) em vez do processamento do HTML. Essa decisão técnica demonstrou ser significativamente mais \textbf{robusta} e \textbf{resiliente} a futuras alterações visuais no \textit{frontend} do site, garantindo a estabilidade da automação ao interagir diretamente com a camada de dados estruturados (JSON).
+Optou-se pela extração direta por meio de requisições à API (utilizando a biblioteca \textit{requests}) em vez do processamento do HTML. Essa decisão técnica demonstrou ser significativamente mais robusta e resiliente a futuras alterações visuais no \textit{frontend} do site, garantindo a estabilidade da automação ao interagir diretamente com a camada de dados estruturados (JSON).
 
-\section{Otimizações de Desempenho e Gerenciamento de Dados}
-\label{sec:otimizacoes-desempenho}
+Considerando o grande volume potencial de arquivos brutos, especialmente os arquivos de áudio WebM, e a limitação de espaço de armazenamento para o desenvolvimento contínuo, foi implementado um mecanismo de gerenciamento de dados baseado em acesso por demanda (\textit{on-demand}). Este mecanismo opera como um subproduto do módulo de automação, permitindo a interação eficiente com o \textit{dataset} sem exigir o \textit{download} e armazenamento permanente de todos os arquivos.
 
-O grande volume de arquivos brutos (PDFs e áudios WebM), somado à limitação de espaço de armazenamento disponível para o desenvolvimento, motivou a implementação de uma estratégia de gestão de recursos.
+O módulo foi projetado para:
+\begin{enumerate}
+    \item Baixar o arquivo específico (PDF ou Áudio) apenas quando ele é requerido pela \textit{pipeline} de processamento para uma determinada reunião.
+    \item Interagir com os dados localmente, garantindo o acesso rápido durante a fase de conversão e processamento.
+    \item Automaticamente liberar o espaço de armazenamento ao final da iteração, excluindo o arquivo local após o seu processamento e conversão para o formato textual.
+\end{enumerate}
 
-A principal otimização realizada foi a implementação da lógica de acesso \textbf{\textit{on-demand}} no módulo de coleta. Por meio desta estratégia, os arquivos são baixados localmente apenas no momento exato em que são necessários para o processamento de uma determinada reunião e são subsequentemente excluídos ao final da iteração. Esta solução foi essencial para minimizar o consumo total de espaço em disco e acelerar o fluxo operacional, evitando gargalos de I/O (Input/Output).
+Quanto ao conjunto de atas utilizadas na composição do \textit{dataset}, sua função principal consistiu em servir como \textit{gold-standard} para a avaliação dos resultados produzidos pela solução desenvolvida. Esses documentos correspondem às atas oficiais disponibilizadas pelo Tribunal Regional Eleitoral do Ceará e foram utilizadas como referência para comparação qualitativa e quantitativa com as atas geradas automaticamente pelo sistema.
 
-\subsection{Desafios no Processamento de Documentos e Áudio}
-\label{sec:desafios-processamento}
+No conjunto de dados, as atas estão organizadas como arquivos de texto, cada uma associada à respectiva transcrição da reunião, formando pares consistentes de documentos. O conteúdo dessas atas oficiais é resultado do processo institucional de elaboração descrito na Seção~\ref{sec:processamento-de-arquivos-PDF}, não sofrendo qualquer intervenção ou adaptação para fins deste estudo. Dessa forma, esses documentos representam fielmente o padrão real adotado pelo órgão, constituindo uma base confiável para a validação da completude, da coerência e da adequação informacional das atas produzidas automaticamente.
 
-A análise exploratória da natureza dos dados brutos revelou desafios específicos que demandaram otimizações rigorosas na \hyperref[sec:processamento-de-dados]{etapa de Processamento de Dados} (Capítulo 3).
+A utilização dessas atas como \textit{gold-standard} possibilitou avaliar o grau de alinhamento entre as informações extraídas pelos modelos de linguagem e o conteúdo efetivamente registrado nos documentos oficiais, permitindo identificar discrepâncias, omissões e redundâncias, bem como analisar a capacidade da solução em reproduzir a estrutura e o conteúdo essenciais de uma ata institucional.
 
-\subsubsection{Tratamento de Arquivos PDF}
+\section{Solução Desenvolvida}
+\label{sec:solucao-desenvolvida-introducao}
 
-A inspeção inicial dos documentos PDFs revelou que uma parcela significativa dos arquivos não possuía texto embutido, indicando que se tratavam de \textbf{digitalizações de documentos físicos} em formato de imagem. Essa descoberta técnica justificou a necessidade obrigatória de implementar um fluxo de trabalho que envolvesse o Reconhecimento Óptico de Caracteres (OCR) via Tesseract para todos os documentos, garantindo a conversão de todos os registros em texto editável, independentemente de sua origem.
+A solução desenvolvida foi concebida para automatizar a elaboração de atas de reunião em contextos jurídicos, a partir da ingestão de dados brutos, especificamente transcrições de reuniões como as descritas no \textit{dataset} apresentado. O objetivo é gerar o produto final sem a necessidade de intervenção humana nos processos de extração de informações e de formatação. Dessa forma, a solução proposta caracteriza-se como a integração dos processos e módulos desenvolvidos ao longo deste trabalho, todos orientados por modelos de linguagem de grande escala (LLMs) executados localmente, em consonância com o foco da pesquisa.
 
-\subsubsection{Qualidade Acústica do Áudio}
+A arquitetura da solução é logicamente organizada em duas fases críticas e sequenciais: a síntese da informação e a estruturação da informação. A fase de síntese constitui a primeira etapa de processamento após a transcrição e o pré-processamento dos dados. Seu objetivo principal é a condensação das informações relevantes — participantes, pautas, discussões e deliberações — em um documento textual. O subproduto dessa fase é um resumo que, em comparação com a transcrição original, apresenta menor extensão, maior organização semântica e maior facilidade de interpretação.
 
-A análise qualitativa das faixas de áudio demonstrou que as gravações de sessões plenárias apresentavam diversos problemas de qualidade acústica que poderiam comprometer a acurácia do modelo de ASR:
-\begin{itemize}
-    \item \textbf{Variações de Volume:} Discrepâncias abruptas na intensidade da voz devido ao uso de microfones fixos.
-    \item \textbf{Ruído de Fundo:} Níveis elevados de ruído ambiente e interferências causadas por microfones abertos.
-    \item \textbf{Reverberação e Eco:} Presença de captação indireta de áudio, especialmente nas falas de participantes remotos.
-\end{itemize}
-Estes fatores evidenciaram que o pré-processamento rigoroso, incluindo a aplicação de filtros de normalização dinâmica (\textit{dynaudnorm}) e redução de ruído (arnndn), seria fundamental para maximizar a precisão do modelo Whisper, conforme detalhado na próxima seção.
+A segunda fase corresponde à estruturação da informação. Nessa etapa, a síntese textual gerada anteriormente é utilizada como entrada para a organização dos dados em formato JSON (JavaScript Object Notation). A adoção desse formato é estratégica, pois possibilita a extração semântica das informações em campos e pares chave-valor definidos por um \textit{schema} específico do domínio jurídico. Além de facilitar o consumo posterior por sistemas automatizados, como o preenchimento de \textit{templates} de atas, essa estruturação permite a validação programática da integridade e da coerência dos dados extraídos pelos modelos de linguagem.
 
-\section{Processamento de dados}
+Nas subseções seguintes, são apresentados os resultados obtidos em cada uma dessas fases da solução, incluindo a definição do método final adotado e os experimentos realizados com diferentes modelos de linguagem , LLaMA 3, LLaMA 3.1, Gemma 2 e Mistral v0.3, bem como a análise comparativa de seus respectivos desempenhos.
 
-\subsection{Processamento de Áudio}
+\subsection{Síntese}
+\label{sec:solucao-desenvolvida-introducao-sintese}
 
-A aplicação do modelo Pyannote aos áudios pré-processados produziu uma segmentação inicial precisa, porém caracterizada por fragmentações frequentes dentro de falas contínuas. Diversas reuniões apresentaram trechos curtos e adjacentes atribuídos ao mesmo locutor, ocasionados por pequenas variações acústicas, respirações ou ruídos residuais do ambiente.
+A etapa de síntese, implementada com base no paradigma \textit{Map-Reduce}, visto na Sessão~\ref{sec:solucao-desenvolvida}, constituiu a primeira fase de processamento aplicada às transcrições nos experimentos realizados. Seu objetivo foi reduzir significativamente o volume textual das transcrições originais, preservando, ao mesmo tempo, as informações centrais necessárias à posterior composição do modelo de ata adotado.
 
-O pós-processamento desenvolvido mostrou-se eficaz na correção dessas fragmentações. O uso do limiar obtido pelo método Multi-Otsu permitiu identificar pausas intralocutor compatíveis com a continuidade natural da fala, resultando na fusão de trechos que haviam sido indevidamente divididos. Como consequência, observou-se uma redução significativa no número total de segmentos e um aumento expressivo na duração média dos trechos atribuídos a cada interlocutor.
+A segmentação prévia das transcrições em blocos textuais menores mostrou-se fundamental para o desempenho dessa etapa, uma vez que permitiu aos modelos de linguagem atuar de forma localizada sobre trechos semanticamente coerentes. Essa abordagem favoreceu a extração de informações relevantes e contribuiu para a redução de redundâncias, além de promover uma organização mais clara do conteúdo sintetizado, quando comparada ao processamento do texto integral.
 
-Além disso, a heurística voltada para sobreposições mínimas entre segmentos de falantes distintos evitou classificações incorretas, reduzindo casos nos quais uma mesma fala era erroneamente atribuída a dois interlocutores diferentes devido a falhas de delimitação. Esse ajuste contribuiu para maior coerência temporal dos turnos de fala e para a diminuição de erros de identificação.
+Na fase de mapeamento (\textit{Map}), os modelos de linguagem foram empregados para identificar, de forma independente em cada segmento, elementos essenciais da reunião, tais como participantes, pautas, discussões e deliberações. Em seguida, na etapa de redução (\textit{Reduce}), os resultados parciais obtidos foram consolidados em um único texto sintético, no qual duplicidades foram removidas e inconsistências entre segmentos foram resolvidas.
 
-De modo geral, o refinamento aplicado aos segmentos resultou em uma diarização mais consistente e alinhada às características reais das interações registradas, favorecendo a etapa subsequente de transcrição e melhorando a qualidade das análises derivadas.
+O texto produzido ao final dessa etapa apresentou-se substancialmente menor que a transcrição original e semanticamente mais estruturado, tornando-se adequado como entrada para a fase subsequente de extração estruturada das informações. Dessa forma, a etapa de síntese atuou como um mecanismo intermediário de normalização e condensação do conteúdo, contribuindo para a robustez do fluxo de processamento como um todo.
+
+Para a avaliação do desempenho computacional da etapa de síntese, o módulo foi executado com cada um dos modelos de linguagem considerados, utilizando-se um subconjunto de 10 transcrições de reuniões. Em cada execução, foi monitorado o tempo de inferência necessário para a geração do texto sintetizado.
+
+A Figura~\ref{fig:histograma-comparativo-tempo-processamento-llms} apresenta a distribuição do tempo de inferência, em segundos, observado para cada modelo de linguagem na tarefa de síntese. Essa análise permite avaliar o custo computacional da abordagem proposta e sua viabilidade em cenários de uso recorrente.
+
+\begin{figure}[h!]
+	\centering
+	\Caption{\label{fig:histograma-comparativo-tempo-processamento-llms}
+	Histograma comparativo da distribuição do tempo de inferência (em segundos) para a tarefa de síntese, segregado por modelo de linguagem.}
+	\UNIFORfig{}{
+		\includegraphics[width=15cm]{figuras/comparativo_tempo_llms}
+	}{
+	\Fonte{Elaboração própria}
+	}
+\end{figure}
+
+A análise do histograma indica que, para todos os modelos avaliados, as distribuições de tempo apresentam comportamento multimodal, caracterizado pela presença de mais de um pico de frequência. Ainda assim, observa-se uma concentração significativa dos tempos de processamento em faixas semelhantes, especialmente em torno de 815,8 segundos (aproximadamente 13,6 minutos) e 986,6 segundos (cerca de 16,4 minutos).
+
+Esse padrão sugere que, no contexto experimental considerado, o tempo de inferência da etapa de síntese é influenciado principalmente pela complexidade da tarefa, associada ao volume textual e à estratégia \textit{Map-Reduce}, e menos pelas diferenças arquiteturais entre os modelos avaliados.
+
+Para uma comparação direta entre os modelos, a Figura~\ref{fig:tempo-medio-processamento} apresenta os valores médios de tempo de inferência obtidos em cada caso. \pagebreak
+
+\begin{figure}[h!]
+	\centering
+	\Caption{\label{fig:tempo-medio-processamento}
+	Comparação do tempo médio de inferência (em segundos) para a tarefa de síntese entre os modelos de linguagem avaliados.}
+	\UNIFORfig{}{
+		\includegraphics[width=15cm]{figuras/tempo_medio_processamento}
+	}{
+	\Fonte{Elaboração própria}
+	}
+\end{figure}
+
+Os valores médios reforçam a tendência observada na análise das distribuições, indicando desempenhos temporais próximos entre os modelos na execução da etapa de síntese. Esse resultado evidencia que, para essa fase do pipeline, a escolha do modelo pode ser orientada prioritariamente por critérios qualitativos, como consistência e completude das informações sintetizadas, sem impacto expressivo no tempo de processamento.
+
+Complementarmente aos indicadores de desempenho computacional apresentados, amostras dos textos sintetizados gerados por cada modelo de linguagem foram mantidos em sua forma original e reunidos no Anexo~\ref{an:sintese-results}. Esse material permite a inspeção direta das saídas produzidas na etapa de síntese para uma mesma transcrição, servindo como base para análises qualitativas posteriores sobre a consistência, a clareza semântica e a cobertura informacional das sínteses obtidas.
+
+\subsection{Estruturação}
+
+A etapa de estruturação, implementada conforme os procedimentos descritos na Seção~\ref{sec:solucao-desenvolvida}, constituiu a segunda e última fase do processamento aplicado às transcrições, sendo responsável pela geração do produto final da solução: dados estruturados referentes a participantes, pautas, discussões e deliberações das reuniões analisadas.
+
+Diferentemente da etapa de síntese, cujos dados de entrada consistem nas transcrições brutas, a estruturação opera sobre os textos sintetizados gerados previamente (Seção~\ref{sec:solucao-desenvolvida-introducao-sintese}). Essa abordagem permitiu reduzir ambiguidades e aumentar a consistência das informações extraídas, ao fornecer aos modelos de linguagem um conteúdo já condensado e semanticamente organizado.
+
+A tarefa de estruturação utilizou a funcionalidade de \textit{structured output} disponibilizada pela plataforma Ollama, que permite restringir as respostas dos modelos de linguagem a esquemas previamente definidos. Esses esquemas foram especificados no formato JSON e implementados por meio da biblioteca \textit{Pydantic}, possibilitando a validação automática das saídas geradas e garantindo aderência à estrutura esperada.
+
+Os esquemas utilizados para a estruturação das informações foram definidos por meio de modelos Pydantic, representando formalmente as entidades extraídas das transcrições, como participantes, pautas, discussões e deliberações. A definição completa desses modelos encontra-se apresentada no Anexo~\ref{an:modelos-pydantic}.
