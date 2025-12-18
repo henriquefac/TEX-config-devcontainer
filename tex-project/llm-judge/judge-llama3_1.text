@@ -1,0 +1,7 @@
+{
+  "fidelidade_factual_score": 1,
+  "acuracia_conteudo_score": 1,
+  "coerencia_e_formato_score": 2,
+  "utilidade_e_concisao_score": 1,
+  "justificativa_detalhada": "O erro é gravíssimo e torna a síntese totalmente inutilizável. O modelo LLM sofreu uma 'alucinação' sistêmica, inventando fatos, processos e temas que não existem na Ata Original (Ground Truth). Por exemplo, citou o 'Processo 180-34-2024' (inexistente na ata), mencionou o 'Lançamento da Revista Sufrágio' e discussões sobre 'Prescrição Punitiva' que jamais ocorreram na sessão de 20/09/2024. Além disso, falhou em identificar as pautas reais, alegando que eram apenas 'títulos sem conteúdo', quando na verdade a ata detalha dezenas de julgamentos de registros de candidatura e propagandas eleitorais. A lista de participantes mistura nomes reais com nomes inventados ou de outras sessões, descaracterizando qualquer valor jurídico."
+}

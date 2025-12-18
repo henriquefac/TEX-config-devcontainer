@@ -5,7 +5,7 @@ Este anexo apresenta os \textit{prompts} utilizados na abordagem baseada no
 paradigma \textit{Map-Reduce} com divisão de tarefas, adotada neste trabalho 
 para a extração estruturada de informações a partir das transcrições das reuniões.
 
-Nessa estratégia, a fase de \textbf{Map} é composta por múltiplos agentes 
+Nessa estratégia, a fase de Map é composta por múltiplos agentes 
 especializados — um para cada tipo de informação relevante:  
 (i) Participantes,  
 (ii) Pautas,  
@@ -14,7 +14,7 @@ especializados — um para cada tipo de informação relevante:
 
 Cada agente possui seu próprio \textit{prompt}, processando de forma independente 
 cada segmento da transcrição.  
-Na fase de \textbf{Reduce}, os resultados parciais de cada agente são consolidados 
+Na fase de Reduce, os resultados parciais de cada agente são consolidados 
 separadamente, produzindo sínteses limpas para cada categoria antes da montagem 
 final da ata.
 
@@ -36,6 +36,8 @@ Sua única tarefa é identificar o nome completo e o cargo/função (se possíve
 de todos os participantes, convidados e ausentes mencionados no segmento 
 da transcrição apresentado.
 
+Se abstenha de gerar textos explicativos ou interlocução com o usuário.
+
 MANDATÓRIO: O RESULTADO DEVE SER INTEIRAMENTE EM PORTUGUÊS BRASILEIRO.
 
 A saída deve ser uma lista simples no formato:
@@ -52,8 +54,10 @@ A saída deve ser uma lista simples no formato:
 Você é um agente de IA responsável por identificar as pautas discutidas 
 durante uma reunião realizada no Tribunal Regional Eleitoral do Ceará.
 
-Sua tarefa é listar cada pauta mencionada no segmento e, quando possível, 
+Sua tarefa é somente listar cada pauta mencionada no segmento e, quando possível, 
 associá-la ao participante ou órgão que a propôs.
+
+Se abstenha de gerar textos explicativos ou interlocução com o usuário.
 
 MANDATÓRIO: O RESULTADO DEVE SER INTEIRAMENTE EM PORTUGUÊS BRASILEIRO.
 
@@ -71,8 +75,10 @@ A saída deve estar no formato:
 Você é um agente de IA responsável por identificar os temas discutidos em um 
 segmento de transcrição de reunião do Tribunal Regional Eleitoral do Ceará.
 
-Sua tarefa é identificar os temas e apresentar uma breve descrição que represente
+Sua tarefa somente é identificar os temas e apresentar uma breve descrição que represente
 o contexto e os pontos debatidos.
+
+Se abstenha de gerar textos explicativos ou interlocução com o usuário.
 
 MANDATÓRIO: O RESULTADO DEVE SER INTEIRAMENTE EM PORTUGUÊS BRASILEIRO.
 
@@ -90,8 +96,10 @@ Formato da saída:
 Você é um agente de IA responsável por identificar as deliberações tomadas em 
 uma reunião do Tribunal Regional Eleitoral do Ceará.
 
-Sua tarefa é identificar as ações deliberadas, o tema relacionado e, sempre que 
+Sua tarefa é somente identificar as ações deliberadas, o tema relacionado e, sempre que 
 possível, indicar o responsável pela execução da ação.
+
+Se abstenha de gerar textos explicativos ou interlocução com o usuário.
 
 MANDATÓRIO: O RESULTADO DEVE SER INTEIRAMENTE EM PORTUGUÊS BRASILEIRO.
 
@@ -119,6 +127,7 @@ Instruções:
 3. Preserve o estilo e o conteúdo original.
 4. NÃO adicione informações externas.
 5. O texto final deve estar inteiramente em Português brasileiro.
+6. Se abstenha de gerar textos explicativos ou interlocução com o usuário.
 
 DADOS BRUTOS:
 {dados_brutos}

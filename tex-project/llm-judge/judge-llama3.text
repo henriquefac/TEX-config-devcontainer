@@ -1,0 +1,7 @@
+{
+  "fidelidade_factual_score": 1,
+  "acuracia_conteudo_score": 1,
+  "coerencia_e_formato_score": 2,
+  "utilidade_e_concisao_score": 1,
+  "justificativa_detalhada": "O erro é gravíssimo e caracteriza uma 'alucinação' completa do modelo. A síntese descreve uma reunião inexistente sobre crimes de formação de quadrilha (Art. 288 CP), penas de 20 mil reais em Cariaçu e discussões sobre a 'Revista Sufrágio'. No entanto, a ATA REAL (Ground Truth) trata exclusivamente de uma sessão de julgamentos de registros de candidatura e propaganda eleitoral das Eleições 2024 (processos de Paracuru, Canindé, Juazeiro, etc.). O modelo Candidato inventou nomes, fatos e decisões que não constam no documento de referência, tornando a síntese juridicamente perigosa e totalmente inútil para automação."
+}

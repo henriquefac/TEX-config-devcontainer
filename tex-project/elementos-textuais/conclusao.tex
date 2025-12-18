@@ -1,24 +1,37 @@
 \chapter{Conclusões e Trabalhos Futuros}
 \label{chap:conclusoes-e-trabalhos-futuros}
 
-\lipsum[2]
-\lipsum[34]
+Este trabalho atingiu os objetivos propostos ao investigar e implementar uma solução baseada em modelos de linguagem para a automação da geração de atas a partir de transcrições de reuniões institucionais, bem como ao avaliar comparativamente o desempenho de diferentes modelos em um contexto jurídico-eleitoral.
+
+A solução desenvolvida automatizou integralmente o fluxo de processamento, desde a conversão de registros audiovisuais em transcrições textuais até a síntese, extração e estruturação das informações de interesse por meio de Modelos de Linguagem de Grande Escala. Como subproduto, foi consolidado um conjunto de dados composto por pares de transcrição e ata oficial, associados a registros públicos de reuniões do Tribunal Regional Eleitoral, além da implementação de um módulo de ingestão e gerenciamento eficiente desses dados.
+
+A experimentação com modelos de pesos abertos executados localmente demonstrou que a arquitetura baseada no paradigma \textit{Map-Reduce} é eficaz para a redução do volume textual, permitindo o processamento de transcrições extensas dentro das limitações de contexto dos modelos avaliados. Contudo, a avaliação sistemática revelou um \textit{trade-off} entre eficiência operacional e confiabilidade factual. Embora o sistema tenha apresentado bom desempenho estrutural e organizacional, a integridade das informações mostrou-se vulnerável a alucinações sistêmicas, conforme identificado pela metodologia \textit{LLM as a Judge}.
+
+Dessa forma, conclui-se que, no estado atual, modelos de menor porte (7B a 9B parâmetros), operando sem mecanismos adicionais de recuperação ou validação externa, ainda não apresentam robustez suficiente para substituir plenamente a revisão humana em aplicações de alta sensibilidade jurídica.
 
 \section{Contribuições do Trabalho}
 \label{sec:contribuicoes-do-trabalho}
 
-\lipsum[3]
+As principais contribuições deste trabalho podem ser resumidas da seguinte forma:
+
+\begin{itemize}
+	\item Consolidação de um \textit{dataset} especializado no domínio jurídico-eleitoral, composto por pares de transcrições e atas oficiais, com potencial de uso como \textit{benchmark} em pesquisas futuras;
+	\item Implementação e avaliação de uma abordagem de inferência local para tarefas de síntese e estruturação de informações aplicadas à geração de atas;
+	\item Garantia de maior segurança e confidencialidade no processamento de informações sensíveis, uma vez que toda a inferência é realizada localmente, sem envio de dados a serviços externos ou infraestruturas de terceiros;
+	\item Produção de dados empíricos e métricas relacionadas ao desempenho de modelos de linguagem locais nas etapas de síntese e extração estruturada;
+	\item Desenvolvimento de \textit{prompts} especializados para tarefas de extração informacional em documentos institucionais.
+\end{itemize}
 
 \section{Limitações}
 \label{sec:limitacoes}
 
-\lipsum[4]
+Entre as principais limitações deste estudo, destaca-se o uso exclusivo de modelos de linguagem de médio porte executados localmente, o que restringiu a capacidade de raciocínio e a fidelidade factual das sínteses produzidas. Isso se deu pela tecnologia acessível para realização da pesquisa.
+
+Além disso, a avaliação foi conduzida sobre um conjunto limitado de transcrições, o que pode impactar a generalização dos resultados para outros contextos institucionais ou jurídicos. Por fim, não foram incorporados mecanismos externos de verificação factual ou recuperação de informações, o que contribuiu para a ocorrência de alucinações identificadas nos experimentos.
 
 \section{Trabalhos Futuros}
 \label{sec:trabalhos-futuros}
 
-\lipsum[5]
+Como continuidade desta pesquisa, apontam-se algumas direções para o aprimoramento da solução proposta. Destaca-se a integração de técnicas de \textit{Retrieval-Augmented Generation} (RAG), com o uso de bases vetoriais contendo transcrições e normativos oficiais, visando reduzir alucinações e aumentar a confiabilidade factual. Outra possibilidade consiste no \textit{fine-tuning} de modelos de código aberto a partir do \textit{dataset} construído, de modo a especializá-los no domínio jurídico-eleitoral.
 
-
-
-
+Adicionalmente, recomenda-se a adoção de uma arquitetura \textit{humano-no-loop}, na qual a saída estruturada seja validada por um servidor humano, posicionando o sistema como ferramenta de apoio à decisão. Por fim, a avaliação de modelos multimodais, capazes de processar simultaneamente áudio e vídeo, apresenta-se como um caminho promissor para capturar informações contextuais não preservadas na transcrição textual.

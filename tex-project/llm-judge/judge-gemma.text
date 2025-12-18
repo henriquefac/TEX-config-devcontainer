@@ -1,0 +1,7 @@
+{
+  "fidelidade_factual_score": 1,
+  "acuracia_conteudo_score": 1,
+  "coerencia_e_formato_score": 2,
+  "utilidade_e_concisao_score": 1,
+  "justificativa_detalhada": "Erro gravíssimo de alucinação e anacronismo. O LLM-Candidato descreve uma reunião comemorativa de 'balanço do ano de 2024' (mencionando eleições já ocorridas e 1º lugar no ranking), enquanto a Ata Original (Ground Truth) refere-se à 81ª Sessão Ordinária em 20/09/2024, em pleno período eleitoral, focada em julgamentos de registros de candidatura e propaganda antecipada. A síntese inventou pautas (Prestação de contas do PT 2023, Revista Sufrágio) e participantes que não constam no documento original, falhando totalmente em capturar os resultados dos julgamentos reais (como o Agravo de Eduardo Bismarck ou o MS de André Fernandes). O modelo parece ter processado dados de uma reunião de final de ano de 2024/2025 em vez do documento fornecido."
+}

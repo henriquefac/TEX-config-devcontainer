@@ -29,6 +29,20 @@
 \usepackage{xcolor}
 
 \lstset{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,                 % Força a quebra de linha
+    breakatwhitespace=false,         % Quebra mesmo sem espaço (evita vazamento)
+    extendedchars=true,
+    inputencoding=utf8,
+    literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+             {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+             {ã}{{\~a}}1 {õ}{{\~o}}1 {Ã}{{\~A}}1 {Õ}{{\~O}}1
+             {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+             {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+             {ç}{{\c{c}}}1 {Ç}{{\c{C}}}1,
+}
+
+\lstset{
   keywordstyle=\ttfamily,
   commentstyle=\ttfamily,
   stringstyle=\ttfamily,
@@ -108,11 +122,10 @@
 %%     Informação sobre o Orientador       %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\orientador{Juliana Martins de Oliveira}
+\orientador{Prof.ª Doutora Juliana Martins de Oliveira}
 \orientadories{Universidade de Fortaleza - UNIFOR}
 \orientadorcentro{Centro de Ciências Tecnológicas - CCT}
-\orientadorfeminino{Sim} % Coloque 'sim' se for do sexo feminino
-
+\orientadorfeminino{sim} % Coloque 'sim' se for do sexo feminino
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%      Informação sobre a banca           %%
@@ -124,25 +137,14 @@
 % \membrodabancadois{Prof. Dr. Fulano de Tal}
 % \membrodabancadoisies{Universidade Estadual do Ceará - UECE}
 
-\membrodabancadois{Membro da Banca Dois}
+\membrodabancadois{Prof. Me. Ronaldo Pinheiro Gonçalves Junior}
 \membrodabancadoiscentro{Centro de Ciências e Tecnologia - CCT}
-\membrodabancadoisies{Universidade do Membro da Banca Dois - SIGLA}
+\membrodabancadoisies{Universidade de Fortaleza - UNIFOR}
 
-\membrodabancatres{Membro da Banca Três}
+\membrodabancatres{Prof. Me. André Wescley Oliveira de Aguiar}
 \membrodabancatrescentro{Centro de Ciências e Tecnologia - CCT}
-\membrodabancatresies{Universidade do Membro da Banca Três - SIGLA}
+\membrodabancatresies{Universidade de Fortaleza - UNIFOR}
 
-\membrodabancaquatro{Membro da Banca Quatro}
-\membrodabancaquatrocentro{Centro de Ciências e Tecnologia - CCT}
-\membrodabancaquatroies{Universidade do Membro da Banca Quatro - SIGLA}
-
-\membrodabancacinco{Membro da Banca Cinco}
-\membrodabancacincocentro{Centro de Ciências e Tecnologia - CCT}
-\membrodabancacincoies{Universidade do Membro da Banca Cinco - SIGLA}
-
-\membrodabancaseis{Membro da Banca Seis}
-\membrodabancaseiscentro{Centro de Ciências e Tecnologia - CCT}
-\membrodabancaseisies{Universidade do Membro da Banca Seis - SIGLA}
 
 \begin{document}
 
@@ -197,15 +199,18 @@
 	%Elementos pós-textuais
 	\bibliography{elementos-pos-textuais/referencias}
 	\imprimirglossario
-	\imprimirapendices
+	%\imprimirapendices
 		% Adicione aqui os apendices do seu trabalho
 		% \input{elementos-pos-textuais/apendices/lorem-ipsum}
 	\imprimiranexos
 		% Adicione aqui os anexos do seu trabalho
 		\input{elementos-pos-textuais/anexos/prompt-single-shot}
-		\input{elementos-pos-textuais/anexos/prompt-map-reduce.tex}
+		\input{elementos-pos-textuais/anexos/prompt-map-reduce}
+		\input{elementos-pos-textuais/anexos/prompt-mult-map-reduce}
 		\input{elementos-pos-textuais/anexos/sinteses-resultados}
+		\input{elementos-pos-textuais/anexos/ata-original}
 		\input{elementos-pos-textuais/anexos/modelos-pydantic}
+		\input{elementos-pos-textuais/anexos/prompt-llm-as-a-judge}
 
 		\input{elementos-pos-textuais/anexos/ata-reuniao-fonte}
 	\imprimirindice

@@ -177,5 +177,37 @@ A execução dessa etapa será orquestrada por um módulo central de extração 
 
 Durante esse processo, serão tratados possíveis erros de geração ou inconsistências de formatação, por meio de mecanismos de parsing e recuperação parcial das saídas textuais. Ao final da execução, os resultados estruturados de todas as categorias serão agregados em um único objeto JSON representativo da ata, acompanhado de informações de status que indicarão o sucesso ou falha da extração em cada componente. Dessa forma, essa etapa buscará garantir previsibilidade do formato final, modularidade do processo de extração e robustez frente a variações no comportamento dos modelos de linguagem.
 
-\section{Métricas de Avaliação}
+\section{Métodos de Avaliação e Métricas}
 \label{sec:metrica-de-avaliacao}
+
+Esta seção descreve os métodos e métricas adotados para avaliar o desempenho da solução proposta. A avaliação foi estruturada para contemplar dois eixos complementares: (i) o desempenho computacional dos modelos e (ii) a qualidade informacional das saídas geradas nas etapas de síntese e estruturação.
+
+Foram avaliados os modelos \textit{LLaMA 3}, \textit{LLaMA 3.1}, \textit{Gemma 2} e \textit{Mistral v0.3}, considerando exclusivamente sua atuação nas etapas descritas na Seção~\ref{sec:solucao-desenvolvida}. Todas as execuções foram realizadas em ambiente local, utilizando a plataforma Ollama, garantindo condições controladas e reprodutibilidade dos experimentos.
+
+\subsection{Avaliação do Desempenho Computacional}
+
+A avaliação do desempenho computacional concentrou-se na etapa de síntese, identificada como o estágio mais custoso do pipeline em termos de tempo de inferência. Essa escolha é justificada pela proposta de execução \textit{on-premise} da solução, na qual latência e previsibilidade são fatores críticos.
+
+Para esse fim, foi definido um subconjunto composto por dez transcrições de reuniões, processadas individualmente por cada modelo. Em cada execução, registrou-se o tempo total de inferência necessário para a geração da síntese textual.
+
+As métricas adotadas foram:
+\begin{itemize}
+	\item \textbf{Tempo médio de inferência}, calculado a partir da média aritmética dos tempos registrados para cada modelo;
+	\item \textbf{Distribuição do tempo de inferência}, analisada por meio de histogramas, permitindo observar a variabilidade e a estabilidade do desempenho entre execuções.
+\end{itemize}
+
+Essas métricas foram utilizadas exclusivamente para fins comparativos entre os modelos, sem interpretação qualitativa nesta etapa.
+
+\subsection{Avaliação da Qualidade da Informação}
+
+A avaliação da qualidade informacional teve como foco a fidelidade factual, a completude das informações e a adequação estrutural das sínteses produzidas. 
+
+Adotou-se uma abordagem híbrida, composta por dois procedimentos complementares: (i) análise qualitativa estruturada e (ii) avaliação automatizada baseada na metodologia \textit{LLM as a Judge}.
+
+A análise qualitativa estruturada consistiu na inspeção sistemática das sínteses geradas, verificando sua aderência aos requisitos definidos nos \textit{prompts} e sua adequação como insumo para a etapa de estruturação. Foram considerados os seguintes critérios: (a) conformidade estrutural, observando a presença explícita dos campos esperados (participantes, pautas, discussões e deliberações); (b) organização semântica interna; e (c) nível de verbosidade, avaliado quanto ao equilíbrio entre concisão e informatividade. As amostras analisadas foram disponibilizadas no Anexo~\ref{an:sintese-results}.
+
+Complementarmente, empregou-se a metodologia \textit{LLM as a Judge}, na qual um modelo de linguagem independente atua como avaliador automatizado. Nesse procedimento, o avaliador recebeu como entrada a transcrição original da reunião, a ata oficial elaborada por humanos (considerada \textit{ground truth}) e a síntese gerada pelo modelo avaliado. A saída consistiu em uma avaliação estruturada em formato JSON, contendo escores numéricos e justificativas textuais.
+
+A avaliação foi conduzida por meio de uma escala ordinal de cinco pontos (1 a 5), considerando os seguintes critérios: fidelidade factual, acurácia informacional, coerência e adequação formal, e utilidade da síntese como insumo para a extração estruturada. Os escores obtidos foram posteriormente consolidados para permitir análises comparativas entre os modelos.
+
+Para o papel de avaliador automatizado, foi utilizado o modelo \textit{Gemini Flash 2.5}, acessado por meio da plataforma Google AI, selecionado por sua capacidade de compreensão contextual, estabilidade de respostas e suporte a saídas estruturadas, características adequadas à aplicação do método \textit{LLM as a Judge} no contexto deste estudo.

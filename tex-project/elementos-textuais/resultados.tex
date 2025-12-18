@@ -126,39 +126,67 @@ O texto produzido ao final dessa etapa apresentou-se substancialmente menor que 
 
 Para a avaliação do desempenho computacional da etapa de síntese, o módulo foi executado com cada um dos modelos de linguagem considerados, utilizando-se um subconjunto de 10 transcrições de reuniões. Em cada execução, foi monitorado o tempo de inferência necessário para a geração do texto sintetizado.
 
-A Figura~\ref{fig:histograma-comparativo-tempo-processamento-llms} apresenta a distribuição do tempo de inferência, em segundos, observado para cada modelo de linguagem na tarefa de síntese. Essa análise permite avaliar o custo computacional da abordagem proposta e sua viabilidade em cenários de uso recorrente.
+A Figura~\ref{fig:histograma-comparativo-tempo-processamento-llms} apresenta a distribuição do tempo de inferência, em segundos, observado para cada modelo de linguagem na tarefa de síntese. Essa análise permite avaliar o custo computacional da abordagem proposta e sua viabilidade em cenários de uso recorrente. \\
 
 \begin{figure}[h!]
 	\centering
 	\Caption{\label{fig:histograma-comparativo-tempo-processamento-llms}
 	Histograma comparativo da distribuição do tempo de inferência (em segundos) para a tarefa de síntese, segregado por modelo de linguagem.}
 	\UNIFORfig{}{
-		\includegraphics[width=15cm]{figuras/comparativo_tempo_llms}
+		\includegraphics[width=15cm]{figuras/distribuicao_tempo_processamento}
 	}{
 	\Fonte{Elaboração própria}
 	}
 \end{figure}
 
-A análise do histograma indica que, para todos os modelos avaliados, as distribuições de tempo apresentam comportamento multimodal, caracterizado pela presença de mais de um pico de frequência. Ainda assim, observa-se uma concentração significativa dos tempos de processamento em faixas semelhantes, especialmente em torno de 815,8 segundos (aproximadamente 13,6 minutos) e 986,6 segundos (cerca de 16,4 minutos).
+A análise do histograma indica que, para todos os modelos avaliados, as distribuições de tempo de inferência apresentam comportamento predominantemente unimodal, caracterizado pela concentração dos valores em torno de um pico de frequência principal. Ainda assim, observa-se uma diferença significativa entre os modelos quanto à dispersão dos tempos registrados e à estabilidade de suas distribuições.
 
-Esse padrão sugere que, no contexto experimental considerado, o tempo de inferência da etapa de síntese é influenciado principalmente pela complexidade da tarefa, associada ao volume textual e à estratégia \textit{Map-Reduce}, e menos pelas diferenças arquiteturais entre os modelos avaliados.
+Os modelos LLaMA~3 e Mistral~v0.3 exibem distribuições mais concentradas em torno de seus respectivos picos, indicando menor variabilidade no tempo de processamento. Esses modelos tendem a operar majoritariamente nas faixas de aproximadamente 225 segundos (4,25 minutos) e 495 segundos (8,25 minutos), respectivamente, evidenciando baixa latência entre a requisição da inferência e a obtenção da resposta, além de maior previsibilidade de desempenho.
 
-Para uma comparação direta entre os modelos, a Figura~\ref{fig:tempo-medio-processamento} apresenta os valores médios de tempo de inferência obtidos em cada caso. \pagebreak
+Em contraste, os modelos LLaMA~3.1 e Gemma~2 apresentam distribuições mais dispersas, com registros que se afastam significativamente do pico de frequência. Esses modelos concentram-se em faixas de tempo superiores, em torno de 1036 segundos (17,26 minutos) e 1846 segundos (30,76 minutos), respectivamente, o que indica maior latência e menor estabilidade temporal ao longo das execuções
+
+Esse padrão sugere que, no contexto experimental considerado, o tempo de inferência da etapa de síntese é não somente pela complexidade da tarefa ou a estratégia implementada (ex: \textit{Map-Reduce}), mas também pelas diferenças arquiteturais entre os modelos avaliados, mpactando diretamente sua previsibilidade e custo computacional.
+
+Para uma comparação direta entre os modelos, a Figura~\ref{fig:tempo-medio-processamento} apresenta os valores médios de tempo de inferência obtidos em cada caso. 
 
 \begin{figure}[h!]
 	\centering
 	\Caption{\label{fig:tempo-medio-processamento}
 	Comparação do tempo médio de inferência (em segundos) para a tarefa de síntese entre os modelos de linguagem avaliados.}
 	\UNIFORfig{}{
-		\includegraphics[width=15cm]{figuras/tempo_medio_processamento}
+		\includegraphics[width=15cm]{figuras/media_tempo_processamento}
 	}{
 	\Fonte{Elaboração própria}
 	}
 \end{figure}
 
-Os valores médios reforçam a tendência observada na análise das distribuições, indicando desempenhos temporais próximos entre os modelos na execução da etapa de síntese. Esse resultado evidencia que, para essa fase do pipeline, a escolha do modelo pode ser orientada prioritariamente por critérios qualitativos, como consistência e completude das informações sintetizadas, sem impacto expressivo no tempo de processamento.
+Os valores médios reforçam a tendência observada na análise das distribuições, indicando desempenhos temporais significativamente distintos entre os modelos avaliados. Observa-se que os modelos LLaMA~3 e Mistral~v0.3 apresentam tempos médios de inferência consideravelmente inferiores quando comparados aos modelos LLaMA~3.1 e Gemma~2, corroborando a menor dispersão e maior concentração em faixas reduzidas de tempo previamente identificadas no histograma.
+
+Essa diferença evidencia que, além da variabilidade observada nas distribuições, o custo computacional médio da etapa de síntese varia de forma expressiva conforme o modelo empregado. Em especial, o modelo Gemma~2 apresentou o maior tempo médio de processamento, refletindo não apenas sua maior latência, mas também a elevada dispersão dos tempos registrados ao longo das execuções. Tal comportamento sugere menor estabilidade temporal, o que pode impactar negativamente cenários de uso contínuo ou aplicações sensíveis a tempo de resposta. \\
+
+Por outro lado, os resultados associados aos modelos LLaMA~3 e Mistral~v0.3 indicam maior previsibilidade e eficiência computacional na execução da etapa de síntese, características desejáveis em pipelines automatizados que demandam escalabilidade e execução recorrente. A menor variabilidade observada nesses casos contribui para uma estimativa mais confiável do tempo total de processamento do sistema.
 
 Complementarmente aos indicadores de desempenho computacional apresentados, amostras dos textos sintetizados gerados por cada modelo de linguagem foram mantidos em sua forma original e reunidos no Anexo~\ref{an:sintese-results}. Esse material permite a inspeção direta das saídas produzidas na etapa de síntese para uma mesma transcrição, servindo como base para análises qualitativas posteriores sobre a consistência, a clareza semântica e a cobertura informacional das sínteses obtidas.
+
+As sínteses produzidas pelos modelos são organizadas em campos bem definidos, incluindo participantes, pautas, discussões acompanhadas de contexto e deliberações. A análise dos exemplos apresentados no anexo evidencia diferenças relevantes na forma como cada modelo adere ao prompt de extração e prioriza determinadas informações. No caso do modelo LLaMA~3, observa-se uma estruturação direta e alinhada ao formato esperado, com poucas variações na organização dos campos. Destaca-se, por exemplo, a separação clara entre discussões gerais da reunião e discussões associadas diretamente à transcrição, indicando maior conformidade com as instruções fornecidas.
+
+Em contraste, a síntese produzida pelo modelo LLaMA~3.1, a partir da mesma transcrição, apresenta diferenças significativas na organização e disposição das informações. Nota-se, inicialmente, a agregação dos participantes por cargo, com a listagem conjunta de nomes associados a categorias como desembargadores, advogados, senadores e presidentes. Embora essa estratégia não tenha sido explicitamente vedada pelo prompt, ela se mostra substancialmente distinta da abordagem adotada pelo modelo anterior, mesmo pertencendo à mesma família de modelos.
+
+Ainda em relação ao LLaMA~3.1, o modelo demonstrou limitações na identificação explícita das pautas discutidas. Em contrapartida, apresentou bom desempenho na extração de temas e deliberações, destacando-se especialmente na contextualização das discussões. Esse comportamento sugere maior liberdade interpretativa justamente nos campos cuja definição no prompt permitia maior flexibilidade semântica, reforçando a influência direta do grau de restrição do esquema de extração sobre a qualidade e a consistência das sínteses geradas.
+
+Ao direcionar a análise para o modelo Gemma~2, observa-se que sua estratégia de extração de participantes aproxima-se daquela adotada pelo LLaMA~3.1, uma vez que os participantes são organizados com base nas funções ou cargos identificados. Entretanto, diferentemente do comportamento esperado, o modelo apresentou desvios recorrentes em relação às diretrizes estabelecidas no prompt, ao introduzir frases de interlocução e comentários explicativos. Tal prática contraria explicitamente a orientação de restringir a saída exclusivamente ao conteúdo extraído, sem qualquer forma adicional de comunicação com o usuário. Esse padrão de comportamento foi observado de maneira consistente ao longo de todas as etapas de extração presentes nessa síntese, indicando menor aderência às restrições impostas pelo processo de estruturação.
+
+Por fim, ao analisar a síntese gerada pelo modelo Mistral~v0.3, observa-se a continuidade da abordagem adotada pelos dois modelos anteriores no que se refere à extração e organização dos participantes, os quais também são agrupados com base nas funções ou cargos identificados. Um aspecto particularmente relevante desse modelo é seu elevado grau de verbosidade quando comparado aos demais avaliados, produzindo descrições mais extensas mesmo possuindo uma arquitetura de dimensões comparáveis.
+
+Apesar dessa maior extensão textual, o Mistral~v0.3 apresentou poucas transgressões às diretrizes estabelecidas nos prompts, limitando-se ocasionalmente à introdução de breves elementos de interlocução com o usuário. No entanto, de modo geral, o modelo demonstrou boa aderência ao formato esperado e elevado nível de organização das informações extraídas. Esse comportamento indica um equilíbrio entre detalhamento e conformidade estrutural, resultando em sínteses bem estruturadas e semanticamente consistentes, ainda que mais prolixas em relação às produzidas pelos demais modelos.
+
+A análise consolidada das avaliações emitidas pelo modelo julgador evidencia um desempenho crítico quanto à fidelidade factual das sínteses geradas. Todos os modelos avaliados (LLaMA~3, LLaMA~3.1, Gemma~2 e Mistral~v0.3) obtiveram a pontuação mínima (1) nos critérios de fidelidade factual e acurácia informacional. Em contrapartida, observaram-se escores regulares no critério de coerência textual (2), associados à preservação da norma culta e da estrutura formal das respostas.
+
+As justificativas fornecidas pelo avaliador apontam de forma consistente para a ocorrência de alucinações factuais severas. No caso do modelo Gemma~2, foi identificado um erro de anacronismo, com a descrição de uma reunião de \textit{balanço do ano de 2024} e pautas inexistentes, em desacordo com a ata oficial, que tratava de julgamentos eleitorais específicos (Anexo~\ref{an:ata-original}). De modo semelhante, a síntese produzida pelo LLaMA~3.1 foi classificada como inutilizável, em razão da invenção de processos e discussões que não constavam na sessão analisada.
+
+Resultados análogos foram observados para os modelos LLaMA~3 e Mistral~v0.3. O primeiro apresentou alucinações relacionadas a crimes e penalidades inexistentes, enquanto o segundo, apesar de maior organização estrutural, introduziu pautas e eventos fictícios. Em todos os casos, o avaliador destacou a falha na identificação correta dos magistrados presentes e das deliberações efetivamente registradas na ata de referência.
+
+Esses resultados indicam que modelos de menor porte, na faixa de 7B a 9B parâmetros, enfrentam limitações significativas para manter a integridade factual em domínios jurídicos de alta complexidade. Observa-se uma tendência à complementação do conteúdo com conhecimentos genéricos oriundos do treinamento prévio, em detrimento de uma extração estrita das informações da transcrição. Dessa forma, embora a etapa de síntese tenha sido eficaz na redução volumétrica e na organização estrutural do texto, os riscos associados à infidelidade factual comprometem sua utilização em processos automatizados sem a adoção de mecanismos adicionais de validação ou revisão humana.
 
 \subsection{Estruturação}
 
@@ -169,3 +197,80 @@ Diferentemente da etapa de síntese, cujos dados de entrada consistem nas transc
 A tarefa de estruturação utilizou a funcionalidade de \textit{structured output} disponibilizada pela plataforma Ollama, que permite restringir as respostas dos modelos de linguagem a esquemas previamente definidos. Esses esquemas foram especificados no formato JSON e implementados por meio da biblioteca \textit{Pydantic}, possibilitando a validação automática das saídas geradas e garantindo aderência à estrutura esperada.
 
 Os esquemas utilizados para a estruturação das informações foram definidos por meio de modelos Pydantic, representando formalmente as entidades extraídas das transcrições, como participantes, pautas, discussões e deliberações. A definição completa desses modelos encontra-se apresentada no Anexo~\ref{an:modelos-pydantic}.
+
+Para a análise dos resultados da etapa de estruturação, foi adotado um procedimento de processamento cruzado entre os modelos de linguagem avaliados. Nesse arranjo experimental, cada modelo foi utilizado para executar a tarefa de extração estruturada a partir das sínteses geradas por todos os modelos considerados, inclusive aquelas produzidas pelo próprio modelo. Essa estratégia permitiu avaliar de forma sistemática a influência da combinação entre o modelo responsável pela síntese e o modelo responsável pela estruturação sobre a qualidade e a consistência dos dados estruturados gerados. Com isso, tornou-se possível identificar padrões de compatibilidade, robustez e sensibilidade entre diferentes pares de modelos ao longo do pipeline, fornecendo subsídios para a análise comparativa apresentada na seção de resultados.
+
+A seguir, a Figura~\ref{fig:tempo-medio-estruturacao-cruzada} mostra um mapa de calor que ilustra o Tempo Médio de Processamento (em segundos) da etapa de Estruturação (eixo Y) em função do Modelo de Sintetização (eixo X).
+
+\begin{figure}[h!]
+	\centering
+	\Caption{\label{fig:tempo-medio-estruturacao-cruzada}
+	Tempo médio de inferência da etapa de estruturação considerando o processamento cruzado entre modelos de linguagem.}
+	\UNIFORfig{}{\includegraphics[width=15cm]{figuras/avaliacao_cruzada_tempo}}{
+	\Fonte{Elaboração própria}
+	}
+\end{figure}
+
+A matriz de calor revela a interação complexa e o impacto direto do resultado da fase de síntese sobre o custo computacional da fase de estruturação. Os valores representados em escala de cor, variando de tons escuros (tempos mais rápidos, próximos a 36 segundos) a tons claros/amarelos (tempos mais lentos, excedendo 1000 segundos), demonstram a compatibilidade operacional entre os diferentes pares de modelos. \pagebreak
+
+Observa-se que a combinação mais eficiente é obtida quando o modelo LLaMA 3:8b é empregado tanto para a sintetização quanto para a estruturação (tempo médio de 36,27s), resultando no menor tempo de inferência de toda a matriz. Em contrapartida, o modelo Gemma 2 atuando como estruturador apresenta latências dramaticamente elevadas, em especial quando a síntese é fornecida pelo Mistral v0.3 (1.093,84s), transformando essa combinação em um gargalo computacional.
+
+No que se refere à qualidade da estruturação, o mesmo experimento — conduzido a partir de 10 registros de sínteses — permitiu avaliar o grau de adequação dos modelos estruturadores à tarefa proposta. Para cada registro, foi verificado se o modelo conseguiu extrair corretamente, a partir da síntese, as informações correspondentes aos campos de participantes, pautas, discussões e deliberações, estruturando-as de acordo com o esquema definido pelo modelo \textit{pydantic}. O sucesso foi registrado sempre que o conteúdo extraído atendia integralmente às restrições sintáticas e semânticas estabelecidas.
+
+Adicionalmente, foram contabilizadas as falhas de geração de resposta, seja por ausência de retorno, desconsideração do comando ou ocorrência de alucinações, bem como os casos classificados como recuperados, nos quais a resposta apresentava informações semanticamente próximas ao esperado, porém ainda fora dos limites estritos do modelo JSON definido. A partir dessas métricas, tornou-se possível avaliar de forma mais abrangente o desempenho dos modelos estruturadores. Na sequência, são apresentados gráficos que ilustram comparativamente o desempenho de cada modelo na etapa de estruturação, considerando, para cada caso, o modelo responsável pela geração da síntese.
+
+Começando pelo modelo \textit{LLaMA~3}, a Figura~\ref{fig:qualidade-estruturacao-llama3} apresenta o gráfico que ilustra o desempenho médio na tarefa de estruturação das sínteses produzidas por cada um dos modelos avaliados. Observa-se, de forma imediata, um elevado índice de falhas quando o \textit{LLaMA~3} é utilizado para estruturar sínteses geradas por modelos distintos. Nesse cenário, a única combinação que apresenta uma média de \textit{sucesso} superior a 2,5 ocorre quando o próprio \textit{LLaMA~3} é também o responsável pela geração da síntese de entrada, atingindo uma média próxima de 3, considerando que o valor máximo possível é 4.
+
+\begin{figure}[h!]
+\centering
+\Caption{\label{fig:qualidade-estruturacao-llama3}
+Qualidade média da etapa de estruturação quando realizada pelo modelo \textit{LLaMA 3:8b}, considerando sínteses geradas por diferentes modelos de linguagem.}
+\UNIFORfig{}{\includegraphics[width=15cm]{figuras/qualidade-estru-llama3}}{
+\Fonte{Elaboração própria}
+}
+\end{figure}
+
+Cabe destacar, em particular, o comportamento observado na estruturação de sínteses produzidas pelo modelo \textit{Mistral} quando processadas pelo \textit{LLaMA~3}. Nessa combinação, o desempenho foi extremamente insatisfatório, com a média de registros classificados como \textit{sem resposta} atingindo aproximadamente 2,5 por documento. Ademais, não foram observados registros classificados como \textit{recuperados}, indicando que, além da elevada taxa de falhas, o modelo também apresentou baixa capacidade de produzir respostas parcialmente adequadas nesse cenário.
+
+Dando continuidade à análise, considera-se o modelo \textit{LLaMA~3.1}, sua evolução natural. A Figura~\ref{fig:qualidade-estruturacao-llama3_1} apresenta o desempenho médio desse modelo na tarefa de estruturação, considerando sínteses geradas pelos diferentes modelos avaliados.
+
+\begin{figure}[h!]
+\centering
+\Caption{\label{fig:qualidade-estruturacao-llama3_1}
+Qualidade média da etapa de estruturação quando realizada pelo modelo \textit{LLaMA~3.1}, considerando sínteses geradas por diferentes modelos de linguagem.}
+\UNIFORfig{}{\includegraphics[width=15cm]{figuras/qualidade-estru-llama3_1}}{
+\Fonte{Elaboração própria}
+}
+\end{figure}
+
+Em contraste com os resultados observados para o \textit{LLaMA~3}, verifica-se que, no caso do \textit{LLaMA~3.1}, predominam as ocorrências classificadas como \textit{recuperadas}, nas quais o modelo é capaz de produzir uma resposta semanticamente adequada, embora ainda não totalmente conforme ao esquema JSON previamente definido. Ao analisar a variação da qualidade da extração em função do modelo responsável pela síntese, observa-se um desempenho marginalmente superior quando o \textit{LLaMA~3.1} atua sobre sínteses geradas pelos modelos \textit{Gemma~2} e \textit{LLaMA~3:8b}. Em ambos os casos, não foram registrados episódios de ausência de resposta. Ainda assim, o \textit{LLaMA~3:8b} apresenta ligeira superioridade em relação ao \textit{Gemma~2}, uma vez que resulta em um número maior de registros classificados como \textit{sucesso} quando suas sínteses são estruturadas pelo \textit{LLaMA~3.1}.
+
+Na sequência, a Figura~\ref{fig:qualidade-estruturacao-gemma} apresenta os resultados da análise de desempenho do modelo \textit{Gemma~2} na tarefa de estruturação. Observa-se uma leve variação em relação aos resultados obtidos com o \textit{LLaMA~3.1}; entretanto, o comportamento geral permanece equivalente entre os dois modelos.
+
+\begin{figure}[h!]
+\centering
+\Caption{\label{fig:qualidade-estruturacao-gemma}
+Qualidade média da etapa de estruturação quando realizada pelo modelo \textit{Gemma~2}, considerando sínteses geradas por diferentes modelos de linguagem.}
+\UNIFORfig{}{\includegraphics[width=15cm]{figuras/qualidade-estru-gemma}}{
+\Fonte{Elaboração própria}
+}
+\end{figure}
+
+Mais uma vez, verifica-se a predominância de registros classificados como \textit{recuperados}, o que indica a geração de respostas semanticamente adequadas, porém ainda incapazes de atender integralmente ao formato exigido pelo modelo JSON estabelecido. Ademais, mantém-se a observação anteriormente destacada de que, quando empregado no processo de extração, o modelo \textit{Gemma~2} apresenta melhor desempenho ao estruturar sínteses produzidas por ele próprio ou pelo \textit{LLaMA~3}. Esse comportamento reforça a existência de um padrão de maior compatibilidade entre modelos com características textuais semelhantes. \\
+
+Dando prosseguimento à análise comparativa, passa-se a avaliar o desempenho do modelo \textit{Mistral v0.3} na etapa de estruturação das sínteses.
+
+\begin{figure}[h!]
+\centering
+\Caption{\label{fig:qualidade-estruturacao-mistral}
+Qualidade média da etapa de estruturação quando realizada pelo modelo \textit{Mistral v0.3}, considerando sínteses geradas por diferentes modelos de linguagem.}
+\UNIFORfig{}{\includegraphics[width=15cm]{figuras/qualidade-estru-mistral}}{
+\Fonte{Elaboração própria}
+}
+\end{figure}
+
+Observando os resultados obtidos com o modelo \textit{Mistral v0.3}, verifica-se um avanço significativo de desempenho em relação aos modelos analisados anteriormente. De modo geral, a grande maioria dos registros é classificada como \textit{sucesso}, indicando elevada capacidade do modelo em extrair e estruturar corretamente as informações a partir das sínteses fornecidas. Registros de \textit{recuperação} ou \textit{sem resposta} são raros ou inexistentes, o que evidencia uma maior robustez do modelo na tarefa de estruturação.
+
+Ainda assim, é possível identificar variações sutis de desempenho conforme o modelo responsável pela geração da síntese. Em particular, observa-se um desempenho superior quando o \textit{Mistral v0.3} atua sobre sínteses produzidas pelos modelos \textit{Gemma~2} e, sobretudo, pelo \textit{LLaMA~3:8b}. Neste último caso, não foram registrados episódios de ausência de resposta ou necessidade de recuperação.
+
+Diante desses resultados, é possível concluir que, de modo geral, o modelo \textit{Mistral v0.3} apresenta desempenho significativamente superior na tarefa de estruturar informações previamente sintetizadas. Ademais, observa-se que sínteses produzidas pelos modelos \textit{Gemma~2} e \textit{LLaMA~3} contribuem positivamente para a qualidade e a estabilidade desse desempenho, permitindo inferir a existência de uma correlação entre o modelo gerador da síntese e a eficácia do processo de estruturação subsequente.

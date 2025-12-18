@@ -1,5 +1,8 @@
+Este trabalho apresenta o desenvolvimento de uma solução de automação do processo de elaboração de atas de reunião no contexto jurídico, fazendo uso de Modelo de Linguagem de Grande Escala (LLMs) executando localmente. Metodologia inicia com a criação de um \textit{dataset} a partir de registros de reunião disponibilizados pelo TRE-CE, logo em seguida, vem a implementação de uma \textit{pipeline} de processamento (inferência) baseado no paradigma \textit{Map-Reduce} para a sintese e estruturação de dados para o formato JSON.
 
+Os resultados desmonstram que modelos como LLaMA~3 e Gemma~2 se destacam, respectivamente, na eficiência computacional e adesão estrutural quando encarregados da tarefa de sintese de dados. Enquanto isso, modelos como Mistral~v0.3 se sobresai quando encarregado da tarefa de estruturação, seguindo um molde pré-estabelecido.
 
+Contudo, a avaliação qualitativa realizada via metodologia \textit{LLM-as-a-Judge} revelou a ocorrência de alucinações sistêmicas nos modelos de menor porte, evidenciando que, embora a automação estrutural seja viável, a integridade factual ainda exige mecanismos adicionais de validação para garantir a segurança jurídica dos documentos gerados.
 
 
 \textbf{Palavras-chave}: LLM. IA. MCP. transformer

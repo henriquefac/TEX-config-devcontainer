@@ -1,0 +1,7 @@
+{
+  "fidelidade_factual_score": 1,
+  "acuracia_conteudo_score": 1,
+  "coerencia_e_formato_score": 2,
+  "utilidade_e_concisao_score": 1,
+  "justificativa_detalhada": "O erro mais grave é o fenômeno de 'alucinação' completa de conteúdo. A Síntese Candidata descreve uma reunião sobre a candidatura de Líria Maria em 'Baretama', crimes de formação de quadrilha, e lançamento da revista 'Sufrágio', temas que NÃO existem na Ata Original (Ground Truth). A Ata Real trata da 81ª Sessão do TRE-CE em 20/09/2024, focada em registros de candidatura de diversos municípios (Paracuru, Forquilha, Itapiúna, etc.) e na retotalização de votos de Eduardo Henrique Maia Bismarck. O modelo falhou em identificar os desembargadores reais (ex: Gladyson Pontes, Érico Silveira) e inventou pautas jurídicas inexistentes no documento de referência."
+}
