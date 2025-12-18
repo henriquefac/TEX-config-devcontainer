@@ -198,6 +198,7 @@ A tarefa de estruturação utilizou a funcionalidade de \textit{structured outpu
 
 Os esquemas utilizados para a estruturação das informações foram definidos por meio de modelos Pydantic, representando formalmente as entidades extraídas das transcrições, como participantes, pautas, discussões e deliberações. A definição completa desses modelos encontra-se apresentada no Anexo~\ref{an:modelos-pydantic}.
 
+
 Para a análise dos resultados da etapa de estruturação, foi adotado um procedimento de processamento cruzado entre os modelos de linguagem avaliados. Nesse arranjo experimental, cada modelo foi utilizado para executar a tarefa de extração estruturada a partir das sínteses geradas por todos os modelos considerados, inclusive aquelas produzidas pelo próprio modelo. Essa estratégia permitiu avaliar de forma sistemática a influência da combinação entre o modelo responsável pela síntese e o modelo responsável pela estruturação sobre a qualidade e a consistência dos dados estruturados gerados. Com isso, tornou-se possível identificar padrões de compatibilidade, robustez e sensibilidade entre diferentes pares de modelos ao longo do pipeline, fornecendo subsídios para a análise comparativa apresentada na seção de resultados.
 
 A seguir, a Figura~\ref{fig:tempo-medio-estruturacao-cruzada} mostra um mapa de calor que ilustra o Tempo Médio de Processamento (em segundos) da etapa de Estruturação (eixo Y) em função do Modelo de Sintetização (eixo X).
